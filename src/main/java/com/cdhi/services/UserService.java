@@ -1,7 +1,9 @@
 package com.cdhi.services;
 
 import com.cdhi.domain.User;
+import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.UserRepository;
+import com.cdhi.services.exceptions.ObjectAlreadyExistsException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ public class UserService {
 
     public User findOne(Integer id) {
         return repo.findById(id).orElseThrow(() -> {
-            throw new ObjectNotFoundException("Theres no user with id: " + id);
+            throw new ObjectNotFoundException("There's no user with id: " + id);
         });
     }
 
@@ -25,13 +27,27 @@ public class UserService {
     }
 
 
-    public User create(User user) {
-        try {
-            user.setId(null);
-            return repo.save(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public User create(UserDTO userDTO) {
+        if (repo.findByEmail(userDTO.getEmail()) != null)
+            throw new ObjectAlreadyExistsException("This Email is already in use");
+        else
+            return repo.save(toObject(userDTO));
+    }
+
+    public User toObject(UserDTO userDTO) {
+        return new User(userDTO.getName(), userDTO.getEmail());
+    }
+
+    public User save(UserDTO userDTO, Integer userId) {
+        User userToUpdate = findOne(userId);
+        userToUpdate
+                .setName(userDTO.getName());
+        repo.save(userToUpdate);
+        return findOne(userId);
+    }
+
+    //TODO analisar a herança de quadros
+    public void delete(Integer userId) {
+        repo.deleteById(userId);
     }
 }

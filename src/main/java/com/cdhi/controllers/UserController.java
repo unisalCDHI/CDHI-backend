@@ -1,10 +1,8 @@
 package com.cdhi.controllers;
 
 import com.cdhi.domain.User;
-import com.cdhi.repositories.UserRepository;
+import com.cdhi.dtos.UserDTO;
 import com.cdhi.services.UserService;
-import com.cdhi.services.exceptions.ObjectAlreadyExistsException;
-import com.cdhi.services.exceptions.ObjectNotFoundException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +37,23 @@ public class UserController {
 
     @ApiOperation(value = "Create User")
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid User user) {
-        User u = service.create(user);
+    public ResponseEntity<?> create(@RequestBody @Valid UserDTO UserDTO) {
+        User u = service.create(UserDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(u.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @ApiOperation(value = "Edit User")
+    @PutMapping(value = "{id}")
+    public ResponseEntity<?> save(@RequestBody @Valid UserDTO userDTO, @PathVariable("id") Integer id) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.save(userDTO, id));
+    }
+
+    @ApiOperation(value = "Delete User")
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        service.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body("User Id: " + id + " deleted successfully!");
     }
 }
