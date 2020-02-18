@@ -1,9 +1,8 @@
 package com.cdhi.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -14,6 +13,11 @@ public class User implements Serializable {
     private Integer id;
     private String name;
     private String email;
+
+//    @JsonIgnore
+//    @ManyToMany
+//    @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
+//    private Set<Board> boards = new HashSet<>();
 
     public User() {
     }
