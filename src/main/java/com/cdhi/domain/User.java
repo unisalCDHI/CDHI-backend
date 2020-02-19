@@ -14,9 +14,9 @@ public class User implements Serializable {
     private String name;
     private String email;
 
-//   @ManyToMany
-//   @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
-//   private Set<Board> boards = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
+    private Set<Board> boards = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Board> myBoards = new ArrayList<>();
@@ -37,13 +37,13 @@ public class User implements Serializable {
         this.id = id;
     }
 
-//    public Set<Board> getBoards() {
-//        return boards;
-//    }
-//
-//    public void setBoards(Set<Board> boards) {
-//        this.boards = boards;
-//    }
+    public Set<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(Set<Board> boards) {
+        this.boards = boards;
+    }
 
     public List<Board> getMyBoards() {
         return myBoards;

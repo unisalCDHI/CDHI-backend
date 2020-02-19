@@ -31,7 +31,7 @@ public class UserController {
 
     @ApiOperation(value = "Get Users")
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
 
@@ -56,4 +56,6 @@ public class UserController {
         service.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("User Id: " + id + " deleted successfully!");
     }
+
+
 }

@@ -14,9 +14,9 @@ public class Board implements Serializable {
     private Integer id;
     private String name;
 
-//    @JsonIgnore
-//    @ManyToMany(mappedBy = "boards")
-//    private Set<User> users = new HashSet<>();
+    @JsonIgnore
+    @ManyToMany(mappedBy = "boards")
+    private Set<User> users = new HashSet<>();
 
     @JsonIgnore
     @ManyToOne
