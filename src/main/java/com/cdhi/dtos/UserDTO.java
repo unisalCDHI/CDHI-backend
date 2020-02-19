@@ -1,7 +1,6 @@
 package com.cdhi.dtos;
 
 import com.cdhi.domain.User;
-import io.swagger.models.auth.In;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;

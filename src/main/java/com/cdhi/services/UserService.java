@@ -29,6 +29,7 @@ public class UserService {
 
 
     public User create(UserDTO userDTO) {
+        userDTO.setId(null);
         if (repo.findByEmail(userDTO.getEmail()) != null)
             throw new ObjectAlreadyExistsException("This Email is already in use");
         else
