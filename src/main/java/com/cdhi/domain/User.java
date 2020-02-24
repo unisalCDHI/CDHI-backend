@@ -14,12 +14,17 @@ public class User implements Serializable {
     private String name;
     private String email;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
     private Set<Board> boards = new HashSet<>();
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Board> myBoards = new ArrayList<>();
+
+    @JsonIgnore
+    @ManyToMany(cascade = CascadeType.DETACH)
+    @JoinTable(name = "USER_CARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "card_id"))
+    private Set<Card> cards = new HashSet<>();
 
     public User() {
     }
@@ -67,6 +72,14 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(Set<Card> cards) {
+        this.cards = cards;
     }
 
     @Override
