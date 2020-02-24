@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 public class User implements Serializable {
@@ -14,10 +14,12 @@ public class User implements Serializable {
     private String name;
     private String email;
 
-//    @JsonIgnore
-//    @ManyToMany
-//    @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
-//    private Set<Board> boards = new HashSet<>();
+    @ManyToMany
+    @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
+    private Set<Board> boards = new HashSet<>();
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    private List<Board> myBoards = new ArrayList<>();
 
     public User() {
     }
@@ -33,6 +35,22 @@ public class User implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Set<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(Set<Board> boards) {
+        this.boards = boards;
+    }
+
+    public List<Board> getMyBoards() {
+        return myBoards;
+    }
+
+    public void setMyBoards(List<Board> myBoards) {
+        this.myBoards = myBoards;
     }
 
     public String getName() {
