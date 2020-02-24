@@ -14,6 +14,8 @@ public class Board implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Lob
+    private String description;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "boards", cascade = CascadeType.DETACH)
@@ -30,6 +32,20 @@ public class Board implements Serializable {
     public Board(String name, User owner) {
         this.name = name;
         this.owner = owner;
+    }
+
+    public Board(String name, User owner, String description) {
+        this.name = name;
+        this.owner = owner;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getId() {
