@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Board implements Serializable {
@@ -25,6 +23,10 @@ public class Board implements Serializable {
     @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "owner_id")
     private User owner;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Card> cards = new ArrayList<>();
 
     public Board() {
     }
@@ -70,6 +72,14 @@ public class Board implements Serializable {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 
     public User getOwner() {
