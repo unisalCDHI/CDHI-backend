@@ -1,14 +1,18 @@
 package com.cdhi.services;
 
+import com.cdhi.domain.Board;
 import com.cdhi.domain.User;
 import com.cdhi.dtos.UserDTO;
+import com.cdhi.repositories.BoardRepository;
 import com.cdhi.repositories.UserRepository;
 import com.cdhi.services.exceptions.ObjectAlreadyExistsException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,6 +20,9 @@ public class UserService {
 
     @Autowired
     UserRepository repo;
+
+    @Autowired
+    BoardRepository boardRepository;
 
     public User findOne(Integer id) {
         return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));

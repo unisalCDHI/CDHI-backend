@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Board implements Serializable {
@@ -13,15 +12,21 @@ public class Board implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Lob
+    private String description;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "boards")
+    @ManyToMany(mappedBy = "boards", cascade = CascadeType.DETACH)
     private Set<User> users = new HashSet<>();
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name = "owner_id")
     private User owner;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Card> cards = new ArrayList<>();
 
     public Board() {
     }
@@ -29,6 +34,20 @@ public class Board implements Serializable {
     public Board(String name, User owner) {
         this.name = name;
         this.owner = owner;
+    }
+
+    public Board(String name, User owner, String description) {
+        this.name = name;
+        this.owner = owner;
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getId() {
@@ -47,13 +66,21 @@ public class Board implements Serializable {
         this.name = name;
     }
 
-//    public Set<User> getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(Set<User> users) {
-//        this.users = users;
-//    }
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public List<Card> getCards() {
+        return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
+    }
 
     public User getOwner() {
         return owner;
@@ -61,5 +88,18 @@ public class Board implements Serializable {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return Objects.equals(id, board.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
