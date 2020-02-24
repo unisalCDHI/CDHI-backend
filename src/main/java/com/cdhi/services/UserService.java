@@ -18,9 +18,7 @@ public class UserService {
     UserRepository repo;
 
     public User findOne(Integer id) {
-        return repo.findById(id).orElseThrow(() -> {
-            throw new ObjectNotFoundException("There's no user with id: " + id);
-        });
+        return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
     }
 
     public List<UserDTO> findAll() {
