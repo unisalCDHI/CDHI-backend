@@ -22,16 +22,29 @@ public class DBService {
 
         User user1 = new User("Jorge", "jorgesilva@gmail.com");
         User user2 = new User("Caio", "caiosilveiranunes@piririm.com");
+        User user3 = new User("Paulinho", "paulinho@pau.linho");
 
         Board board1 = new Board("Board 1", user1);
         Board board2 = new Board("Board 2", user1);
         Board board3 = new Board("Board 3", user2);
+
+        Board board4 = new Board("Board do teste", user3);
+
         user1.getMyBoards().add(board1);
+        user1.getBoards().add(board1);
+
         user1.getMyBoards().add(board2);
+        user1.getBoards().add(board2);
+
         user2.getMyBoards().add(board3);
+        user2.getBoards().add(board3);
+
         user2.getBoards().add(board2);
 
-        userRepository.saveAll(Arrays.asList(user1, user2));
-        boardRepository.saveAll(Arrays.asList(board1, board2, board3));
+        user3.getMyBoards().add(board4);
+        user3.getBoards().add(board4);
+
+        userRepository.saveAll(Arrays.asList(user1, user2, user3));
+        boardRepository.saveAll(Arrays.asList(board1, board2, board3, board4));
     }
 }

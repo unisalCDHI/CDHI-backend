@@ -14,7 +14,7 @@ public class User implements Serializable {
     private String name;
     private String email;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
     private Set<Board> boards = new HashSet<>();
 
