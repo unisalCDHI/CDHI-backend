@@ -1,6 +1,5 @@
 package com.cdhi.services;
 
-import com.cdhi.domain.Board;
 import com.cdhi.domain.User;
 import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.BoardRepository;
@@ -8,11 +7,12 @@ import com.cdhi.repositories.UserRepository;
 import com.cdhi.services.exceptions.ObjectAlreadyExistsException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,8 +28,8 @@ public class UserService {
         return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
     }
 
-    public List<UserDTO> findAll() {
-        return repo.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
+    public List<UserDTO> findAll(String name) {
+        return repo.findDistinctByNameContainingIgnoreCase(name).stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
 
@@ -53,8 +53,12 @@ public class UserService {
         return findOne(userId);
     }
 
-    //TODO analisar a herança de quadros
     public void delete(Integer userId) {
         repo.deleteById(userId);
+    }
+
+    public Page<User> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return repo.findDistinctByNameContainingIgnoreCase(name, pageRequest);
     }
 }
