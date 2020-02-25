@@ -6,6 +6,7 @@ import com.cdhi.services.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,8 @@ public class UserController {
 
     @ApiOperation(value = "Get Users")
     @GetMapping
-    public ResponseEntity<List<UserDTO>> findAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
+    public ResponseEntity<List<UserDTO>> findAll(@RequestParam(value = "name", defaultValue = "") String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAll(name));
     }
 
     @ApiOperation(value = "Create User")
@@ -57,5 +58,15 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("User Id: " + id + " deleted successfully!");
     }
 
+    @ApiOperation(value = "Get all Users By PAGE + search name")
+    @GetMapping(value = "page")
+    public ResponseEntity<Page<User>> getAllPresetsByPage(
+            @RequestParam(value = "name", defaultValue = "") String name,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10")Integer size,
+            @RequestParam(value = "orderBy", defaultValue = "name")String orderBy,
+            @RequestParam(value = "direction", defaultValue = "ASC")String direction) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAllByPage(name, page, size, orderBy, direction));
+    }
 
 }
