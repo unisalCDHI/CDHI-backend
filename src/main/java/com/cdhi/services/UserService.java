@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public class UserService {
     @Autowired
     BoardRepository boardRepository;
 
+    @Autowired
+    BCryptPasswordEncoder CRYPTER;
+
     public User findOne(Integer id) {
         return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
     }
@@ -37,8 +41,10 @@ public class UserService {
         userDTO.setId(null);
         if (repo.findByEmail(userDTO.getEmail()) != null)
             throw new ObjectAlreadyExistsException("This Email is already in use");
-        else
+        else{
+            userDTO.setPassword(CRYPTER.encode(userDTO.getPassword()));
             return repo.save(toObject(userDTO));
+        }
     }
 
     public User toObject(UserDTO userDTO) {

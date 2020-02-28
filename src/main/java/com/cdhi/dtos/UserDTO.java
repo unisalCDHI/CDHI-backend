@@ -23,7 +23,6 @@ public class UserDTO implements Serializable {
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotNull(message = "'Password' cannot be null")
     @NotEmpty(message = "'Password' is required")
     private String password;
 

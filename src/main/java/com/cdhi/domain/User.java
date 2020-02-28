@@ -1,10 +1,12 @@
 package com.cdhi.domain;
 
+import com.cdhi.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class User implements Serializable {
@@ -12,7 +14,12 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Column(unique = true)
     private String email;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PROFILES")
+    private Set<Integer> profiles = new HashSet<>();
 
     @JsonIgnore
     private String password;
@@ -30,12 +37,14 @@ public class User implements Serializable {
     private Set<Card> cards = new HashSet<>();
 
     public User() {
+        addProfile(Profile.USER);
     }
 
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+        addProfile(Profile.USER);
     }
 
     public Integer getId() {
@@ -52,6 +61,14 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Profile> getProfiles() {
+        return profiles.stream().map(Profile::toEnum).collect(Collectors.toSet());
+    }
+
+    public void addProfile(Profile profile) {
+        profiles.add(profile.getCod());
     }
 
     public List<Board> getBoards() {
