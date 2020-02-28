@@ -34,7 +34,7 @@ public class BoardService {
                 board.getDescription(),
                 userService.toDTO(board.getOwner()),
                 board.getUsers()
-                        .stream().map(user -> userService.toDTO(user)).collect(Collectors.toSet()),
+                        .stream().map(user -> userService.toDTO(user)).collect(Collectors.toList()),
                 board.getCards());
     }
 
