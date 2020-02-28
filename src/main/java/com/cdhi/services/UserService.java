@@ -45,6 +45,10 @@ public class UserService {
         return new User(userDTO.getName(), userDTO.getEmail());
     }
 
+    public UserDTO toDTO(User user) {
+        return new UserDTO(user);
+    }
+
     public User save(UserDTO userDTO, Integer userId) {
         User userToUpdate = findOne(userId);
         userToUpdate

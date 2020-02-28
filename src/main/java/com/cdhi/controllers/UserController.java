@@ -60,7 +60,7 @@ public class UserController {
 
     @ApiOperation(value = "Get all Users By PAGE + search name")
     @GetMapping(value = "page")
-    public ResponseEntity<Page<User>> getAllPresetsByPage(
+    public ResponseEntity<Page<User>> getAllByPage(
             @RequestParam(value = "name", defaultValue = "") String name,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "10")Integer size,
