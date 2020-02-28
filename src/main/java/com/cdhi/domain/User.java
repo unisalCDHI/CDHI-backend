@@ -14,6 +14,9 @@ public class User implements Serializable {
     private String name;
     private String email;
 
+    @JsonIgnore
+    private String password;
+
     @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
     private List<Board> boards = new ArrayList<>();
@@ -29,9 +32,10 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String name, String email) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
+        this.password = password;
     }
 
     public Integer getId() {
@@ -40,6 +44,14 @@ public class User implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Board> getBoards() {

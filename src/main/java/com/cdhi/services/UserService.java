@@ -42,7 +42,7 @@ public class UserService {
     }
 
     public User toObject(UserDTO userDTO) {
-        return new User(userDTO.getName(), userDTO.getEmail());
+        return new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword());
     }
 
     public UserDTO toDTO(User user) {

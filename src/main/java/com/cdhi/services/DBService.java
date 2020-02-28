@@ -8,6 +8,7 @@ import com.cdhi.repositories.CardRepository;
 import com.cdhi.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -27,11 +28,14 @@ public class DBService {
     @Autowired
     CardRepository cardRepository;
 
+    @Autowired
+    BCryptPasswordEncoder CRYPTER;
+
     public void instantiateTestDatabase() throws ParseException {
 
-        User user1 = new User("Jorge", "jorgesilva@gmail.com");
-        User user2 = new User("Caio", "caiosilveiranunes@piririm.com");
-        User user3 = new User("Paulinho", "paulinho@pau.linho");
+        User user1 = new User("Jorge", "jorgesilva@gmail.com", CRYPTER.encode("123456"));
+        User user2 = new User("Caio", "caiosilveiranunes@piririm.com", CRYPTER.encode("123123"));
+        User user3 = new User("Paulinho", "paulinho@pau.linho", CRYPTER.encode("456456"));
 
         Board board1 = new Board("Board 1", user1);
         Board board2 = new Board("Board 2", user1);
