@@ -1,10 +1,12 @@
 package com.cdhi.domain;
 
+import com.cdhi.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class User implements Serializable {
@@ -12,7 +14,21 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Column(unique = true)
     private String email;
+    private Boolean enabled;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PROFILES")
+    private Set<Integer> profiles = new HashSet<>();
+
+    @JsonIgnore
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "KEYS")
+    private List<String> _key = new ArrayList<>();
+
+    @JsonIgnore
+    private String password;
 
     @ManyToMany(cascade = CascadeType.DETACH)
     @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
@@ -26,12 +42,42 @@ public class User implements Serializable {
     @JoinTable(name = "USER_CARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "card_id"))
     private Set<Card> cards = new HashSet<>();
 
+
     public User() {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
+        setEnabled(false);
+        get_key().add(
+                random.ints(leftLimit, rightLimit + 1)
+                        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                        .limit(targetStringLength)
+                        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                        .toString()
+        );
+        addProfile(Profile.USER);
     }
 
-    public User(String name, String email) {
+    public User(String name, String email, String password) {
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+
         this.name = name;
         this.email = email;
+        this.password = password;
+        addProfile(Profile.USER);
+        setEnabled(false);
+        get_key().add(
+                random.ints(leftLimit, rightLimit + 1)
+                        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                        .limit(targetStringLength)
+                        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                        .toString()
+        );
     }
 
     public Integer getId() {
@@ -40,6 +86,38 @@ public class User implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<String> get_key() {
+        return _key;
+    }
+
+    public void set_key(List<String> _key) {
+        this._key = _key;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Set<Profile> getProfiles() {
+        return profiles.stream().map(Profile::toEnum).collect(Collectors.toSet());
+    }
+
+    public void addProfile(Profile profile) {
+        profiles.add(profile.getCod());
     }
 
     public List<Board> getBoards() {

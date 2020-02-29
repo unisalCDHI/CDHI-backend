@@ -26,4 +26,10 @@ public class BoardController {
     public ResponseEntity<BoardDTO> getById(@PathVariable Integer id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.findOne(id));
     }
+
+//    @ApiOperation(value = "Get Board by USER ID")
+//    @GetMapping(value = "/user/{id}")
+//    public ResponseEntity<BoardDTO> getAllBoardsFromUser(@PathVariable Integer id) {
+//        return ResponseEntity.status(HttpStatus.OK).body(service.findOne(id));
+//    }
 }

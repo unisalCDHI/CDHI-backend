@@ -1,6 +1,7 @@
 package com.cdhi.controllers;
 
 import com.cdhi.domain.User;
+import com.cdhi.dtos.NewUserDTO;
 import com.cdhi.dtos.UserDTO;
 import com.cdhi.services.UserService;
 import io.swagger.annotations.Api;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 import java.util.List;
 
@@ -38,8 +41,8 @@ public class UserController {
 
     @ApiOperation(value = "Create User")
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody @Valid UserDTO UserDTO) {
-        User u = service.create(UserDTO);
+    public ResponseEntity<?> create(@RequestBody @Valid NewUserDTO newUserDTO) {
+        User u = service.create(newUserDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(u.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -67,6 +70,22 @@ public class UserController {
             @RequestParam(value = "orderBy", defaultValue = "name")String orderBy,
             @RequestParam(value = "direction", defaultValue = "ASC")String direction) {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAllByPage(name, page, size, orderBy, direction));
+    }
+
+    @ApiOperation(value = "Changes User PASSWORD")
+    @PutMapping(value = "/password/{id}")
+    public ResponseEntity<?> changePassword(@PathVariable("id") Integer id,
+                                            @RequestBody
+                                                @NotNull(message = "'Password' cannot be null")
+                                                @NotEmpty(message = "'Password' is required") String newPassword) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.save(newPassword, id));
+    }
+
+    @ApiOperation(value = "Enables User")
+    @GetMapping(value = "confirm/{id}/{key}")
+    public ResponseEntity<?> enables(@PathVariable("id") Integer id,
+                                     @PathVariable("key") String key) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.enable(id, key));
     }
 
 }
