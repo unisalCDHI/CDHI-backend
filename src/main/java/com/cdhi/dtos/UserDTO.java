@@ -1,8 +1,6 @@
 package com.cdhi.dtos;
 
 import com.cdhi.domain.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -21,10 +19,6 @@ public class UserDTO implements Serializable {
     @NotEmpty(message = "'Email' is required")
     @Email(message = "Invalid Email")
     private String email;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotEmpty(message = "'Password' is required")
-    private String password;
 
     public UserDTO() {
     }
@@ -59,11 +53,4 @@ public class UserDTO implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

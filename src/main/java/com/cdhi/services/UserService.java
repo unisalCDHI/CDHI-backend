@@ -1,6 +1,7 @@
 package com.cdhi.services;
 
 import com.cdhi.domain.User;
+import com.cdhi.dtos.NewUserDTO;
 import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.BoardRepository;
 import com.cdhi.repositories.UserRepository;
@@ -37,18 +38,18 @@ public class UserService {
     }
 
 
-    public User create(UserDTO userDTO) {
-        userDTO.setId(null);
-        if (repo.findByEmail(userDTO.getEmail()) != null)
+    public User create(NewUserDTO newUserDTO) {
+        newUserDTO.setId(null);
+        if (repo.findByEmail(newUserDTO.getEmail()) != null)
             throw new ObjectAlreadyExistsException("This Email is already in use");
-        else{
-            userDTO.setPassword(CRYPTER.encode(userDTO.getPassword()));
-            return repo.save(toObject(userDTO));
+        else {
+            newUserDTO.setPassword(CRYPTER.encode(newUserDTO.getPassword()));
+            return repo.save(toObject(newUserDTO));
         }
     }
 
-    public User toObject(UserDTO userDTO) {
-        return new User(userDTO.getName(), userDTO.getEmail(), userDTO.getPassword());
+    public User toObject(NewUserDTO newUserDTO) {
+        return new User(newUserDTO.getName(), newUserDTO.getEmail(), newUserDTO.getPassword());
     }
 
     public UserDTO toDTO(User user) {
@@ -59,6 +60,13 @@ public class UserService {
         User userToUpdate = findOne(userId);
         userToUpdate
                 .setName(userDTO.getName());
+        repo.save(userToUpdate);
+        return findOne(userId);
+    }
+
+    public User save(String newPassword, Integer userId) {
+        User userToUpdate = findOne(userId);
+        userToUpdate.setPassword(CRYPTER.encode(newPassword));
         repo.save(userToUpdate);
         return findOne(userId);
     }
