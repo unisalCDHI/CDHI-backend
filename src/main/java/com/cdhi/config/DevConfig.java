@@ -1,6 +1,8 @@
 package com.cdhi.config;
 
 import com.cdhi.services.DBService;
+import com.cdhi.services.EmailService;
+import com.cdhi.services.SmtpEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,5 +27,10 @@ public class DevConfig {
             return false;
         dbService.instantiateTestDatabase();
         return true;
+    }
+
+    @Bean
+    public EmailService emailService(){
+        return new SmtpEmailService();
     }
 }

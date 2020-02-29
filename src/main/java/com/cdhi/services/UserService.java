@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,9 @@ public class UserService {
 
     @Autowired
     BCryptPasswordEncoder CRYPTER;
+
+    @Autowired
+    private EmailService emailService;
 
     public User findOne(Integer id) {
         return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
@@ -44,7 +48,9 @@ public class UserService {
             throw new ObjectAlreadyExistsException("This Email is already in use");
         else {
             newUserDTO.setPassword(CRYPTER.encode(newUserDTO.getPassword()));
-            return repo.save(toObject(newUserDTO));
+            User user = repo.save(toObject(newUserDTO));
+            emailService.sendUserConfirmationHtmlEmail(findOne(user.getId()));
+            return user;
         }
     }
 
@@ -78,5 +84,18 @@ public class UserService {
     public Page<User> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
         return repo.findDistinctByNameContainingIgnoreCase(name, pageRequest);
+    }
+
+    public User enable(Integer id, String _key) {
+        List<String> key = new ArrayList<>();
+        key.add(_key);
+
+        User user = findOne(id);
+        if (user.get_key().get(0).equals(key.get(0))) {
+            user.setEnabled(true);
+            repo.save(user);
+            return findOne(id);
+        }
+        throw new ObjectNotFoundException("Key not found, check your email");
     }
 }

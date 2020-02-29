@@ -14,15 +14,17 @@ public class UserSS implements UserDetails {
     private Integer id;
     private String email;
     private String password;
+    private Boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserSS() {
     }
 
-    public UserSS(Integer id, String email, String password, Set<Profile> profiles) {
+    public UserSS(Integer id, String email, String password, Set<Profile> profiles, Boolean enabled) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.enabled = enabled;
         this.authorities = profiles.stream().map(p -> new SimpleGrantedAuthority(p.getDescription())).collect(Collectors.toSet());
     }
 
@@ -62,6 +64,6 @@ public class UserSS implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

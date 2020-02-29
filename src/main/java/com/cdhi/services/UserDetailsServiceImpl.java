@@ -20,6 +20,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = repo.findByEmail(email);
         if (user == null)
             throw new UsernameNotFoundException(email);
-        return new UserSS(user.getId(), user.getEmail(), user.getPassword(), user.getProfiles());
+        return new UserSS(user.getId(), user.getEmail(), user.getPassword(), user.getProfiles(), user.getEnabled());
     }
 }
