@@ -81,4 +81,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(service.save(newPassword, id));
     }
 
+    @ApiOperation(value = "Enables User")
+    @GetMapping(value = "confirm/{id}/{key}")
+    public ResponseEntity<?> enables(@PathVariable("id") Integer id,
+                                     @PathVariable("key") String key) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.enable(id, key));
+    }
+
 }
