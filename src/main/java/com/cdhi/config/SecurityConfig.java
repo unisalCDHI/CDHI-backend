@@ -38,6 +38,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] PUBLIC_MATCHERS = {
             "/h2-console/**",
+            "/login",
             "/v2/api-docs",
             "/configuration/ui",
             "/swagger-resources/**",
