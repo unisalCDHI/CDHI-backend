@@ -1,5 +1,6 @@
 package com.cdhi.controllers.exceptions;
 
+import com.cdhi.services.exceptions.AuthorizationException;
 import com.cdhi.services.exceptions.ObjectAlreadyExistsException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -23,5 +24,11 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> objectAlreadyExistsException(ObjectAlreadyExistsException e, HttpServletRequest request) {
         StandardError err = new StandardError(HttpStatus.CONFLICT.value(), Collections.singletonList(new Error(e.getMessage())), HttpStatus.CONFLICT.name(), System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(err);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<StandardError> authorization(AuthorizationException e, HttpServletRequest request) {
+        StandardError err = new StandardError(HttpStatus.FORBIDDEN.value(), Collections.singletonList(new Error(e.getMessage())), HttpStatus.FORBIDDEN.name(), System.currentTimeMillis());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(err);
     }
 }

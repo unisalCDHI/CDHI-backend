@@ -1,16 +1,20 @@
 package com.cdhi.services;
 
 import com.cdhi.domain.User;
+import com.cdhi.domain.enums.Profile;
 import com.cdhi.dtos.NewUserDTO;
 import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.BoardRepository;
 import com.cdhi.repositories.UserRepository;
+import com.cdhi.security.UserSS;
+import com.cdhi.services.exceptions.AuthorizationException;
 import com.cdhi.services.exceptions.ObjectAlreadyExistsException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +37,19 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
+    public static UserSS authenticated() {
+        try {
+            return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public User findOne(Integer id) {
+        UserSS user = UserService.authenticated();
+        if (user==null || !user.hasRole(Profile.ADMIN) && !id.equals(user.getId())) {
+            throw new AuthorizationException("Acesso Negado");
+        }
         return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
     }
 
@@ -49,7 +65,7 @@ public class UserService {
         else {
             newUserDTO.setPassword(CRYPTER.encode(newUserDTO.getPassword()));
             User user = repo.save(toObject(newUserDTO));
-            emailService.sendUserConfirmationHtmlEmail(findOne(user.getId()));
+            emailService.sendUserConfirmationHtmlEmail(user);
             return user;
         }
     }
