@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title th:remove="all">User Confirmation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div>
+    <h1>id: <span th:text="${user.id}"> </span></h1>
+    <p> Usuário: <span th:text="${user.name}"></span></p>
+    <p> Email: <span th:text="${user.email}"></span></p>
+    <a th:href="@{${confirm_url} + ${user.id} + '/' + ${user._key[0]}}">Clique aqui para confirmar seu Email</a>
+                                                    <!--        referência-->
+<!--    <h3>Detalhes do usuário:</h3>-->
+<!--    <table border="1">-->
+<!--        <tr>-->
+<!--            <th>papapapa</th>-->
+<!--            <th>papapapa</th>-->
+<!--            <th>papapapa</th>-->
+<!--            <th>papapapa</th>-->
+<!--        </tr>-->
+<!--        <tr th:each="item : ${pedido.items}">-->
+<!--            <td th:text="${item.product.name}">nome</td>-->
+<!--            <td th:text="${item.quantidade}">quantidade</td>-->
+<!--            <td th:text="${#numbers.formatDecimal(item.preco, 0, 'POINT', 2, 'COMMA')}">preco</td>-->
+<!--            <td th:text="${#numbers.formatDecimal(item.subTotal, 0, 'POINT', 2, 'COMMA')}">subTotal</td>-->
+<!--        </tr>-->
+<!--    </table>-->
+<!--    <p> Valor total: <span th:text="${#numbers.formatDecimal(pedido.total, 0, 'POINT', 2, 'COMMA')}"></span></p>-->
+</div>
+</body>
+</html>

@@ -8,6 +8,19 @@ import java.util.*;
 
 @Entity
 public class Board implements Serializable {
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Board{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", users=").append(users);
+        sb.append(", owner=").append(owner);
+        sb.append(", cards=").append(cards);
+        sb.append('}');
+        return sb.toString();
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
