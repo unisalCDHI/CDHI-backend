@@ -36,6 +36,9 @@ public class DBService {
         User user1 = new User("Jorge", "jorgesilva@gmail.com", CRYPTER.encode("123456"));
         User user2 = new User("Caio", "caiosilveiranunes@piririm.com", CRYPTER.encode("123123"));
         User user3 = new User("Paulinho", "paulinho@pau.linho", CRYPTER.encode("456456"));
+        user1.setEnabled(true);
+        user2.setEnabled(true);
+        user3.setEnabled(true);
 
         Board board1 = new Board("Board 1", user1);
         Board board2 = new Board("Board 2", user1);
