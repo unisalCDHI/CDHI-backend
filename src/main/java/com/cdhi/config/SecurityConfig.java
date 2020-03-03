@@ -1,6 +1,7 @@
 package com.cdhi.config;
 
 import com.cdhi.security.JWTAuthenticationFilter;
+import com.cdhi.security.JWTAuthorizationFilter;
 import com.cdhi.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -48,13 +49,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] PUBLIC_MATCHERS_POST = {
-            "/users"
+            "/users/**"
     };
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
-        if (Arrays.asList(env.getActiveProfiles()).contains("dev")) {
+        if (Arrays.asList(env.getActiveProfiles()).contains("test")) {
             http.headers().frameOptions().disable();
             http.authorizeRequests()
                     .anyRequest().permitAll();
@@ -68,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(PUBLIC_MATCHERS).permitAll()
                     .anyRequest().authenticated();
         }
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
