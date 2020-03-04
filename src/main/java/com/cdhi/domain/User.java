@@ -18,6 +18,8 @@ public class User implements Serializable {
     private String email;
     private Boolean enabled;
 
+    private Date created;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "PROFILES")
     private Set<Integer> profiles = new HashSet<>();
@@ -58,6 +60,7 @@ public class User implements Serializable {
                         .toString()
         );
         addProfile(Profile.USER);
+        this.created = new Date(System.currentTimeMillis());
     }
 
     public User(String name, String email, String password) {
@@ -78,6 +81,7 @@ public class User implements Serializable {
                         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                         .toString()
         );
+        this.created = new Date(System.currentTimeMillis());
     }
 
     public Integer getId() {
@@ -98,6 +102,10 @@ public class User implements Serializable {
 
     public List<String> get_key() {
         return _key;
+    }
+
+    public Date getCreated() {
+        return created;
     }
 
     public void set_key(List<String> _key) {
@@ -172,5 +180,9 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id, email);
+    }
+
+    public void deleteKey() {
+        this._key = null;
     }
 }

@@ -39,6 +39,9 @@ public class DBService {
         user1.setEnabled(true);
         user2.setEnabled(true);
         user3.setEnabled(true);
+        user1.set_key(null);
+        user2.set_key(null);
+        user3.set_key(null);
 
         Board board1 = new Board("Board 1", user1);
         Board board2 = new Board("Board 2", user1);
