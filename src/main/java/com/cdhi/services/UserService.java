@@ -106,11 +106,12 @@ public class UserService {
         List<String> key = new ArrayList<>();
         key.add(_key);
 
-        User user = findOne(id);
+        User user = repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
         if (user.get_key().get(0).equals(key.get(0))) {
             user.setEnabled(true);
+            user.deleteKey();
             repo.save(user);
-            return findOne(id);
+            return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
         }
         throw new ObjectNotFoundException("Key not found, check your email");
     }
