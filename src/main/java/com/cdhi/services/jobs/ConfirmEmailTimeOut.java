@@ -4,11 +4,17 @@ import com.cdhi.domain.User;
 import com.cdhi.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,8 +24,11 @@ public class ConfirmEmailTimeOut {
     @Autowired
     UserRepository repo;
 
-    public void checkout() {
-        log.info("Running Job... -> Procurando usuários com o tempo de confirmação de conta expirado");
+    private final static int accountExpiration = 86400000;
+
+    public void checkout(int interval) {
+
+        log.info("Rodando o Job cada " + interval + " ms... -> Procurando usuários com o tempo de confirmação de conta expirado");
         int count = 0;
         List<Map<String, Integer>> keys = repo.findKeys();
 
@@ -27,7 +36,7 @@ public class ConfirmEmailTimeOut {
         List<User> timedOutUsers = new ArrayList<>();
 
         for (User user : usersDisabled) {
-            if (!user.getEnabled() && (System.currentTimeMillis() - user.getCreated().getTime()) >= 86400000) { //'enabled = false' and past '24' hours
+            if (!user.getEnabled() && (System.currentTimeMillis() - user.getCreated().getTime()) >= accountExpiration) { //'enabled = false' and past '24' hours
                 timedOutUsers.add(user);
                 count++;
             }

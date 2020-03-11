@@ -4,8 +4,10 @@ import com.cdhi.domain.Board;
 import com.cdhi.domain.User;
 import com.cdhi.domain.enums.Profile;
 import com.cdhi.dtos.BoardDTO;
+import com.cdhi.dtos.NewBoardDTO;
 import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.BoardRepository;
+import com.cdhi.repositories.UserRepository;
 import com.cdhi.security.UserSS;
 import com.cdhi.services.exceptions.AuthorizationException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
@@ -25,10 +27,13 @@ public class BoardService {
     @Autowired
     UserService userService;
 
-    public boolean isUserInBoard(Board board) {
+    @Autowired
+    UserRepository userRepository;
+
+    private boolean isUserInBoard(Board board) {
         UserSS user = UserService.authenticated();
         if (user==null || !user.hasRole(Profile.ADMIN) && board.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
-            throw new AuthorizationException("Acesso Negado");
+            throw new AuthorizationException("Acesso negado, você não participa deste quadro.");
         }
         return true;
     }
@@ -40,7 +45,7 @@ public class BoardService {
             return toDTO(board);
     }
 
-    public BoardDTO toDTO(Board board) {
+    private BoardDTO toDTO(Board board) {
         System.out.println(board);
         return new BoardDTO(
                 board.getId(),
@@ -50,6 +55,29 @@ public class BoardService {
                 board.getUsers()
                         .stream().map(user -> userService.toDTO(user)).collect(Collectors.toList()),
                 board.getCards());
+    }
+
+    public Board create(NewBoardDTO newBoardDTO) {
+        UserSS userSS = UserService.authenticated();
+        if (userSS==null) {
+            throw new AuthorizationException("Você precisa estar logado para criar um quadro");
+        }
+
+        Board board = toBoard(newBoardDTO);
+        User user = userService.findOne(userSS.getId());
+        board.setOwner(user);
+        board.getUsers().add(user);
+        Board savedBoard = repo.save(board);
+
+        user.getMyBoards().add(savedBoard);
+        user.getBoards().add(savedBoard);
+        userRepository.save(user);
+
+        return savedBoard;
+    }
+
+    private Board toBoard(NewBoardDTO newBoardDTO) {
+        return new Board(newBoardDTO.getName(), null , newBoardDTO.getDescription());
     }
 
 //    public List<UserDTO> findAll(String name) {

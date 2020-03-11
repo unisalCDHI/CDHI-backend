@@ -19,6 +19,8 @@ import java.util.Date;
 @EnableScheduling
 public class TestConfig {
 
+    private static final int interval = 300000;
+
     @Autowired
     private DBService dbService;
 
@@ -36,8 +38,8 @@ public class TestConfig {
         return new MockEmailService();
     }
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = interval)
     public void scheduleFixedRateTask() {
-        confirmEmailTimeOut.checkout();
+        confirmEmailTimeOut.checkout(interval);
     }
 }

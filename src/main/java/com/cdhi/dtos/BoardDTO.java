@@ -16,7 +16,7 @@ public class BoardDTO implements Serializable {
 
     private Integer id;
 
-    @NotNull(message = "'Email' cannot be null")
+    @NotNull(message = "'Name' cannot be null")
     @NotEmpty(message = "'Name' is required")
     private String name;
 
@@ -27,6 +27,7 @@ public class BoardDTO implements Serializable {
     @NotEmpty(message = "'Owner' is required")
     private UserDTO owner;
 
+    @NotNull(message = "'Users' cannot be null")
     private List<UserDTO> users;
 
     private List<Card> cards;

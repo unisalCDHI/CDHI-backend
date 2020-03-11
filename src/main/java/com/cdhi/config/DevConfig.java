@@ -19,6 +19,8 @@ import java.text.ParseException;
 @EnableScheduling
 public class DevConfig {
 
+    private static final int interval = 300000;
+
     @Autowired
     private DBService dbService;
 
@@ -41,8 +43,8 @@ public class DevConfig {
         return new SmtpEmailService();
     }
 
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = interval)
     public void scheduleFixedRateTask() {
-        confirmEmailTimeOut.checkout();
+        confirmEmailTimeOut.checkout(interval);
     }
 }
