@@ -2,9 +2,12 @@ package com.cdhi.services;
 
 import com.cdhi.domain.Board;
 import com.cdhi.domain.User;
+import com.cdhi.domain.enums.Profile;
 import com.cdhi.dtos.BoardDTO;
 import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.BoardRepository;
+import com.cdhi.security.UserSS;
+import com.cdhi.services.exceptions.AuthorizationException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,19 @@ public class BoardService {
     @Autowired
     UserService userService;
 
+    public boolean isUserInBoard(Board board) {
+        UserSS user = UserService.authenticated();
+        if (user==null || !user.hasRole(Profile.ADMIN) && board.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
+            throw new AuthorizationException("Acesso Negado");
+        }
+        return true;
+    }
+
     public BoardDTO findOne(Integer id) {
-        return toDTO(repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no board with id: " + id)));
+            Board board = repo.findById(id).orElseThrow(() ->
+                    new ObjectNotFoundException("There's no board with id: " + id));
+            isUserInBoard(board); // verifies if user is in board he's trying to get
+            return toDTO(board);
     }
 
     public BoardDTO toDTO(Board board) {
