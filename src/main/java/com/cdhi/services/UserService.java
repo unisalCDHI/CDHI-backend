@@ -48,9 +48,9 @@ public class UserService {
     public User findOne(Integer id) {
         UserSS user = UserService.authenticated();
         if (user==null || !user.hasRole(Profile.ADMIN) && !id.equals(user.getId())) {
-            throw new AuthorizationException("Acesso Negado");
+            throw new AuthorizationException("Você precisa estar logado no usuário que deseja recuperar as informações ou em uma conta ADMIN");
         }
-        return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
+        return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("Não foi encontrado um usuário com o id: " + id));
     }
 
     public List<UserDTO> findAll(String name) {
@@ -61,7 +61,7 @@ public class UserService {
     public User create(NewUserDTO newUserDTO) {
         newUserDTO.setId(null);
         if (repo.findByEmail(newUserDTO.getEmail()) != null)
-            throw new ObjectAlreadyExistsException("This Email is already in use");
+            throw new ObjectAlreadyExistsException("Este email já está sendo usado");
         else {
             newUserDTO.setPassword(CRYPTER.encode(newUserDTO.getPassword()));
             User user = repo.save(toObject(newUserDTO));
@@ -97,22 +97,22 @@ public class UserService {
         repo.deleteById(userId);
     }
 
-    public Page<User> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
+    public Page<UserDTO> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-        return repo.findDistinctByNameContainingIgnoreCase(name, pageRequest);
+        return repo.findDistinctByNameContainingIgnoreCase(name, pageRequest).map(UserDTO::new);
     }
 
     public User enable(Integer id, String _key) {
         List<String> key = new ArrayList<>();
         key.add(_key);
 
-        User user = repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
+        User user = repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("Não foi encontrado um usuário com o id: " + id));
         if (user.get_key().get(0).equals(key.get(0))) {
             user.setEnabled(true);
             user.deleteKey();
             repo.save(user);
-            return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("There's no user with id: " + id));
+            return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("Não foi encontrado um usuário com o id: " + id));
         }
-        throw new ObjectNotFoundException("Key not found, check your email");
+        throw new ObjectNotFoundException("Chave não encontrada, verifique seu email");
     }
 }
