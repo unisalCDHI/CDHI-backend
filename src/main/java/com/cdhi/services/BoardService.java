@@ -31,6 +31,19 @@ public class BoardService {
     @Autowired
     UserRepository userRepository;
 
+    public void addUserInBoard(Integer boardId, Integer userId) {
+        BoardDTO boardDTO = findOne(boardId);
+        Board board = repo.getOne(boardDTO.getId());
+        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("Não foi encontrado um usuário com o id: " + userId));
+        board.getUsers().add(user);
+        user.getBoards().add(board);
+
+        userRepository.save(user);
+        repo.save(board);
+    }
+
+//    public void removeUserFromBoard(Integer boardId, User user);
+
     private boolean isUserInBoard(Board board) {
         UserSS user = UserService.authenticated();
         if (user==null || !user.hasRole(Profile.ADMIN) && board.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
