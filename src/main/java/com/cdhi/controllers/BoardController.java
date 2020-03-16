@@ -46,8 +46,8 @@ public class BoardController {
     }
 
     @ApiOperation(value = "Add user to Board")
-    @PostMapping(value = "{boardId}")
-    public ResponseEntity<?> addUserIntoBoard(@PathVariable("boardId") Integer boardId, @RequestBody Integer userId) {
+    @PostMapping(value = "{boardId}/{userId}")
+    public ResponseEntity<?> addUserIntoBoard(@PathVariable("boardId") Integer boardId, @PathVariable("userId") Integer userId) {
         service.addUserInBoard(boardId, userId);
         return ResponseEntity.status(HttpStatus.OK).body("User Id: " + userId + " added to Board " + boardId + " successfully!");
     }
