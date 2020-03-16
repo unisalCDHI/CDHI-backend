@@ -5,7 +5,6 @@ import com.cdhi.domain.User;
 import com.cdhi.domain.enums.Profile;
 import com.cdhi.dtos.BoardDTO;
 import com.cdhi.dtos.NewBoardDTO;
-import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.BoardRepository;
 import com.cdhi.repositories.UserRepository;
 import com.cdhi.security.UserSS;
@@ -32,9 +31,12 @@ public class BoardService {
     UserRepository userRepository;
 
     public void addUserInBoard(Integer boardId, Integer userId) {
+        Resolver.isMe(userId);
         BoardDTO boardDTO = findOne(boardId);
         Board board = repo.getOne(boardDTO.getId());
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("Não foi encontrado um usuário com o id: " + userId));
+        Resolver.isUserToAddAlreadyInBoard(user, board);
+
         board.getUsers().add(user);
         user.getBoards().add(board);
 
@@ -42,22 +44,28 @@ public class BoardService {
         repo.save(board);
     }
 
-//    public void removeUserFromBoard(Integer boardId, User user);
+    public void removeUserFromBoard(Integer boardId, Integer userId) {
+        Resolver.isMe(userId);
+        BoardDTO boardDTO = findOne(boardId);
+        Board board = repo.getOne(boardDTO.getId());
+        Resolver.isMyBoard(board); // check if user is owner
 
-    private boolean isUserInBoard(Board board) {
-        UserSS user = UserService.authenticated();
-        if (user==null || !user.hasRole(Profile.ADMIN) && board.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
-            throw new AuthorizationException("Acesso negado, você não participa deste quadro.");
-        }
-        return true;
+        User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("Não foi encontrado um usuário com o id: " + userId));
+        Resolver.isUserToRemoveNotInBoard(user, board);
+
+        board.getUsers().removeIf(u -> u.getId().equals(user.getId()));
+        user.getBoards().removeIf(b -> b.getId().equals(board.getId()));
+
+        userRepository.save(user);
+        repo.save(board);
     }
 
     public void delete(Integer boardId) {
         List<User> usersToSave = new ArrayList<>();
 
         BoardDTO boardDTO = findOne(boardId);
-
         Board board = repo.getOne(boardId);
+        Resolver.isMyBoard(board);
 
         for(User user : board.getUsers()) {
             user.getBoards().removeIf(b -> b.getId().equals(boardId));
@@ -79,7 +87,7 @@ public class BoardService {
     public BoardDTO findOne(Integer id) {
             Board board = repo.findById(id).orElseThrow(() ->
                     new ObjectNotFoundException("There's no board with id: " + id));
-            isUserInBoard(board); // verifies if user is in board he's trying to get
+            Resolver.isUserInBoard(board); // verifies if user is in board he's trying to get
             return toDTO(board);
     }
 
@@ -121,4 +129,39 @@ public class BoardService {
 //    public List<UserDTO> findAll(String name) {
 //        return repo.findDistinctByNameContainingIgnoreCase(name).stream().map(UserDTO::new).collect(Collectors.toList());
 //    }
+}
+
+abstract class Resolver {
+    protected static void isUserToAddAlreadyInBoard(User user, Board board) {
+        if (user==null || board.getUsers().stream().anyMatch(u -> u.getId().equals(user.getId()))) {
+            throw new AuthorizationException("Acesso negado, o usuário informado já participa do quadro.");
+        }
+    }
+
+    protected static void isUserToRemoveNotInBoard(User user, Board board) {
+        if (user==null || board.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
+            throw new AuthorizationException("Acesso negado, o usuário informado não participa do quadro.");
+        }
+    }
+
+    protected static void isMyBoard(Board board) {
+        UserSS user = UserService.authenticated();
+        if (user==null || !user.hasRole(Profile.ADMIN) && !board.getOwner().getId().equals(user.getId())) {
+            throw new AuthorizationException("Acesso negado, apenas o dono do quadro pode realizar a operação.");
+        }
+    }
+
+    protected static void isMe(Integer userId) {
+        UserSS user = UserService.authenticated();
+        if (user==null || userId.equals(user.getId())) {
+            throw new AuthorizationException("Acesso negado, você não pode realizar a operação com o usuário logado.");
+        }
+    }
+
+    protected static void isUserInBoard(Board board) {
+        UserSS user = UserService.authenticated();
+        if (user==null || !user.hasRole(Profile.ADMIN) && board.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
+            throw new AuthorizationException("Acesso negado, você não participa deste quadro.");
+        }
+    }
 }

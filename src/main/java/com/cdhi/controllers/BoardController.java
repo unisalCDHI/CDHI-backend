@@ -51,4 +51,11 @@ public class BoardController {
         service.addUserInBoard(boardId, userId);
         return ResponseEntity.status(HttpStatus.OK).body("User Id: " + userId + " added to Board " + boardId + " successfully!");
     }
+
+    @ApiOperation(value = "Remove user from Board")
+    @DeleteMapping(value = "{boardId}/{userId}")
+    public ResponseEntity<?> removeUserFromBoard(@PathVariable("boardId") Integer boardId, @PathVariable("userId") Integer userId) {
+        service.removeUserFromBoard(boardId, userId);
+        return ResponseEntity.status(HttpStatus.OK).body("User Id: " + userId + " removed from Board " + boardId + " successfully!");
+    }
 }
