@@ -49,6 +49,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = ((UserSS) authResult.getPrincipal()).getUsername();
         String token = jwtUtil.generateToken(username);
         response.addHeader("Authorization","Bearer " + token);
+        response.addHeader("Id", ((UserSS) authResult.getPrincipal()).getId().toString());
     }
 
     private static class JWTAuthenticationFailureHandler implements AuthenticationFailureHandler {
