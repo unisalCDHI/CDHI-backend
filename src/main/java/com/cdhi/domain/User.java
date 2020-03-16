@@ -32,11 +32,11 @@ public class User implements Serializable {
     @JsonIgnore
     private String password;
 
-    @ManyToMany(cascade = CascadeType.DETACH)
+    @ManyToMany
     @JoinTable(name = "USER_BOARD", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "board_id"))
     private List<Board> boards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> myBoards = new ArrayList<>();
 
     @JsonIgnore

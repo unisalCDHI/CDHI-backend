@@ -33,12 +33,12 @@ public class Board implements Serializable {
     private Set<User> users = new HashSet<>();
 
     @JsonIgnore
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cards = new ArrayList<>();
 
     public Board() {
