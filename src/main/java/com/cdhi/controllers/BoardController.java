@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -37,9 +38,10 @@ public class BoardController {
         return ResponseEntity.created(uri).build();
     }
 
-//    @ApiOperation(value = "Get Boards by USER ID")
-//    @GetMapping(value = "/user/{id}")
-//    public ResponseEntity<BoardDTO> getAllBoardsFromUser(@PathVariable Integer id) {
-//        return ResponseEntity.status(HttpStatus.OK).body(service.findOne(id));
-//    }
+    @ApiOperation(value = "Delete Board")
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        service.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Board Id: " + id + " deleted successfully!");
+    }
 }

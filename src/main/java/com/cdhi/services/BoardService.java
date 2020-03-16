@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,30 @@ public class BoardService {
             throw new AuthorizationException("Acesso negado, você não participa deste quadro.");
         }
         return true;
+    }
+
+    public void delete(Integer boardId) {
+        List<User> usersToSave = new ArrayList<>();
+
+        BoardDTO boardDTO = findOne(boardId);
+
+        Board board = repo.getOne(boardId);
+
+        for(User user : board.getUsers()) {
+            user.getBoards().removeIf(b -> b.getId().equals(boardId));
+            usersToSave.add(user);
+        }
+        User u = userService.findOne(board.getOwner().getId());
+        u.getMyBoards().removeIf(b -> b.getId().equals(boardId));
+        usersToSave.add(u);
+
+        board.getUsers().clear();
+        board.setOwner(null);
+
+        userRepository.saveAll(usersToSave);
+        board = repo.save(board);
+
+        repo.deleteById(board.getId());
     }
 
     public BoardDTO findOne(Integer id) {
