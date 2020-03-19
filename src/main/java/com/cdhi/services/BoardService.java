@@ -126,6 +126,23 @@ public class BoardService {
         return new Board(newBoardDTO.getName(), null , newBoardDTO.getDescription());
     }
 
+    public void leave(Integer boardId) {
+        BoardDTO boardDTO = findOne(boardId);
+        Board board = repo.getOne(boardDTO.getId());
+
+        UserSS userSS = UserService.authenticated();
+        Resolver.amINotTheOwner(board, userSS.getId());
+        User user = userService.findOne(userSS.getId());
+        Resolver.isUserToRemoveNotInBoard(user, board);
+
+        board.getUsers().removeIf(u -> u.getId().equals(user.getId()));
+        user.getBoards().removeIf(b -> b.getId().equals(board.getId()));
+
+        userRepository.save(user);
+        repo.save(board);
+
+    }
+
 //    public List<UserDTO> findAll(String name) {
 //        return repo.findDistinctByNameContainingIgnoreCase(name).stream().map(UserDTO::new).collect(Collectors.toList());
 //    }
@@ -162,6 +179,12 @@ abstract class Resolver {
         UserSS user = UserService.authenticated();
         if (user==null || !user.hasRole(Profile.ADMIN) && board.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
             throw new AuthorizationException("Acesso negado, você não participa deste quadro.");
+        }
+    }
+
+    protected static void amINotTheOwner(Board board, Integer userId) {
+        if (board.getOwner().getId().equals(userId)) {
+            throw new AuthorizationException("Acesso negado, você não pode sair de um quadro que é dono.");
         }
     }
 }

@@ -58,4 +58,11 @@ public class BoardController {
         service.removeUserFromBoard(boardId, userId);
         return ResponseEntity.status(HttpStatus.OK).body("User Id: " + userId + " removed from Board " + boardId + " successfully!");
     }
+
+    @ApiOperation(value = "Leave Board")
+    @PutMapping(value = "{boardId}/leave")
+    public ResponseEntity<?> leaveBoard(@PathVariable("boardId") Integer boardId) {
+        service.leave(boardId);
+        return ResponseEntity.status(HttpStatus.OK).body("You left Board " + boardId + " successfully!");
+    }
 }
