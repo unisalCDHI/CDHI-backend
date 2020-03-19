@@ -13,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @Api(value = "Board Controller")
@@ -64,5 +65,11 @@ public class BoardController {
     public ResponseEntity<?> leaveBoard(@PathVariable("boardId") Integer boardId) {
         service.leave(boardId);
         return ResponseEntity.status(HttpStatus.OK).body("You left Board " + boardId + " successfully!");
+    }
+
+    @ApiOperation(value = "Edit Board")
+    @PutMapping(value = "{boardId}")
+    public ResponseEntity<?> updateBoard(@RequestBody @Valid NewBoardDTO newBoardDTO, @PathVariable("boardId") Integer boardId) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.save(boardId, newBoardDTO));
     }
 }

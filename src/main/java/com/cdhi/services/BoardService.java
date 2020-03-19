@@ -143,6 +143,17 @@ public class BoardService {
 
     }
 
+    public Board save(Integer boardId, NewBoardDTO newBoardDTO) {
+        BoardDTO boardDTO = findOne(boardId);
+        Board board = repo.getOne(boardId);
+        Resolver.isMyBoard(board);
+
+        board.setName(newBoardDTO.getName());
+        board.setDescription(newBoardDTO.getDescription());
+
+        return repo.save(board);
+    }
+
 //    public List<UserDTO> findAll(String name) {
 //        return repo.findDistinctByNameContainingIgnoreCase(name).stream().map(UserDTO::new).collect(Collectors.toList());
 //    }
