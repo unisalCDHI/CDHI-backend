@@ -5,6 +5,7 @@ import com.cdhi.domain.User;
 import com.cdhi.domain.enums.Profile;
 import com.cdhi.dtos.BoardDTO;
 import com.cdhi.dtos.NewBoardDTO;
+import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.BoardRepository;
 import com.cdhi.repositories.UserRepository;
 import com.cdhi.security.UserSS;
@@ -12,10 +13,15 @@ import com.cdhi.services.exceptions.AuthorizationException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -152,6 +158,25 @@ public class BoardService {
         board.setDescription(newBoardDTO.getDescription());
 
         return repo.save(board);
+    }
+
+    public Page<BoardDTO> findAllMyByPage(String name, Integer page, Integer size, String orderBy, String direction) {
+        UserSS userSS = UserService.authenticated();
+        User user = userService.findOne(userSS.getId());
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return repo.findDistinctByNameContainingIgnoreCaseAndOwner_id(name, pageRequest, user.getId()).map(BoardDTO::new);
+    }
+
+    public Page<BoardDTO> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
+        UserSS userSS = UserService.authenticated();
+        User user = userService.findOne(userSS.getId());
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        List<BoardDTO> boards = user.getBoards().stream()
+                .map(BoardDTO::new)
+                .filter(boardDTO -> boardDTO.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
+        Page<BoardDTO> boardsPage = new PageImpl<>(boards, pageRequest, boards.size());
+        return boardsPage;
     }
 
 //    public List<UserDTO> findAll(String name) {
