@@ -5,6 +5,7 @@ import com.cdhi.domain.User;
 import com.cdhi.domain.enums.Profile;
 import com.cdhi.dtos.BoardDTO;
 import com.cdhi.dtos.NewBoardDTO;
+import com.cdhi.dtos.UserDTO;
 import com.cdhi.repositories.BoardRepository;
 import com.cdhi.repositories.UserRepository;
 import com.cdhi.security.UserSS;
@@ -12,10 +13,15 @@ import com.cdhi.services.exceptions.AuthorizationException;
 import com.cdhi.services.exceptions.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -126,6 +132,53 @@ public class BoardService {
         return new Board(newBoardDTO.getName(), null , newBoardDTO.getDescription());
     }
 
+    public void leave(Integer boardId) {
+        BoardDTO boardDTO = findOne(boardId);
+        Board board = repo.getOne(boardDTO.getId());
+
+        UserSS userSS = UserService.authenticated();
+        Resolver.amINotTheOwner(board, userSS.getId());
+        User user = userService.findOne(userSS.getId());
+        Resolver.isUserToRemoveNotInBoard(user, board);
+
+        board.getUsers().removeIf(u -> u.getId().equals(user.getId()));
+        user.getBoards().removeIf(b -> b.getId().equals(board.getId()));
+
+        userRepository.save(user);
+        repo.save(board);
+
+    }
+
+    public Board save(Integer boardId, NewBoardDTO newBoardDTO) {
+        BoardDTO boardDTO = findOne(boardId);
+        Board board = repo.getOne(boardId);
+        Resolver.isMyBoard(board);
+
+        board.setName(newBoardDTO.getName());
+        board.setDescription(newBoardDTO.getDescription());
+
+        return repo.save(board);
+    }
+
+    public Page<BoardDTO> findAllMyByPage(String name, Integer page, Integer size, String orderBy, String direction) {
+        UserSS userSS = UserService.authenticated();
+        User user = userService.findOne(userSS.getId());
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        return repo.findDistinctByNameContainingIgnoreCaseAndOwner_id(name, pageRequest, user.getId()).map(BoardDTO::new);
+    }
+
+    public Page<BoardDTO> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
+        UserSS userSS = UserService.authenticated();
+        User user = userService.findOne(userSS.getId());
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
+        List<BoardDTO> boards = user.getBoards().stream()
+                .map(BoardDTO::new)
+                .filter(boardDTO -> boardDTO.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
+        Page<BoardDTO> boardsPage = new PageImpl<>(boards, pageRequest, boards.size());
+        return boardsPage;
+    }
+
 //    public List<UserDTO> findAll(String name) {
 //        return repo.findDistinctByNameContainingIgnoreCase(name).stream().map(UserDTO::new).collect(Collectors.toList());
 //    }
@@ -162,6 +215,12 @@ abstract class Resolver {
         UserSS user = UserService.authenticated();
         if (user==null || !user.hasRole(Profile.ADMIN) && board.getUsers().stream().noneMatch(u -> u.getId().equals(user.getId()))) {
             throw new AuthorizationException("Acesso negado, você não participa deste quadro.");
+        }
+    }
+
+    protected static void amINotTheOwner(Board board, Integer userId) {
+        if (board.getOwner().getId().equals(userId)) {
+            throw new AuthorizationException("Acesso negado, você não pode sair de um quadro que é dono.");
         }
     }
 }
