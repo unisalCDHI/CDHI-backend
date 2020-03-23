@@ -1,5 +1,6 @@
 package com.cdhi.domain;
 
+import com.cdhi.domain.enums.Background;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -28,6 +29,8 @@ public class Board implements Serializable {
     @Lob
     private String description;
 
+    private Background background;
+
     @JsonIgnore
     @ManyToMany(mappedBy = "boards", cascade = CascadeType.DETACH)
     private Set<User> users = new HashSet<>();
@@ -42,17 +45,20 @@ public class Board implements Serializable {
     private List<Card> cards = new ArrayList<>();
 
     public Board() {
+        this.background = Background.B0;
     }
 
     public Board(String name, User owner) {
         this.name = name;
         this.owner = owner;
+        this.background = Background.B0;
     }
 
     public Board(String name, User owner, String description) {
         this.name = name;
         this.owner = owner;
         this.description = description;
+        this.background = Background.B0;
     }
 
     public String getDescription() {
@@ -101,6 +107,14 @@ public class Board implements Serializable {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public Background getBackground() {
+        return background;
+    }
+
+    public void setBackground(Background background) {
+        this.background = background;
     }
 
     @Override
