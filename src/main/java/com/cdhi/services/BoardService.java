@@ -2,6 +2,7 @@ package com.cdhi.services;
 
 import com.cdhi.domain.Board;
 import com.cdhi.domain.User;
+import com.cdhi.domain.enums.Background;
 import com.cdhi.domain.enums.Profile;
 import com.cdhi.dtos.BoardDTO;
 import com.cdhi.dtos.NewBoardDTO;
@@ -177,6 +178,14 @@ public class BoardService {
                 .collect(Collectors.toList());
         Page<BoardDTO> boardsPage = new PageImpl<>(boards, pageRequest, boards.size());
         return boardsPage;
+    }
+
+    public void changeBackground(Integer boardId, Background background) {
+        BoardDTO boardDTO = findOne(boardId);
+        Board board = repo.getOne(boardId);
+        Resolver.isUserInBoard(board);
+        board.setBackground(background);
+        repo.save(board);
     }
 
 //    public List<UserDTO> findAll(String name) {

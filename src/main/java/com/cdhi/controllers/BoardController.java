@@ -1,6 +1,7 @@
 package com.cdhi.controllers;
 
 import com.cdhi.domain.Board;
+import com.cdhi.domain.enums.Background;
 import com.cdhi.dtos.BoardDTO;
 import com.cdhi.dtos.NewBoardDTO;
 import com.cdhi.services.BoardService;
@@ -94,4 +95,12 @@ public class BoardController {
                                                     @RequestParam(value = "direction", defaultValue = "ASC")String direction) {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAllByPage(name, page, size, orderBy, direction));
     }
+
+    @ApiOperation(value = "Changes board's background")
+    @PutMapping(value = "/{boardId}/background")
+    public ResponseEntity<?> changeBackground(@PathVariable("boardId") Integer boardId, @RequestBody Background background) {
+        service.changeBackground(boardId, background);
+        return ResponseEntity.status(HttpStatus.OK).body("You changed background from Board " + boardId + " successfully!");
+    }
+
 }
