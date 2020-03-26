@@ -29,7 +29,8 @@ public class Card {
     public Card() {
     }
 
-    public Card(Integer size, String name, String description, Date start_date, Date end_date) {
+    public Card(Column column, Integer size, String name, String description, Date start_date, Date end_date) {
+        this.column = column;
         this.size = size;
         this.name = name;
         this.description = description;

@@ -3,6 +3,7 @@ package com.cdhi.services;
 import com.cdhi.domain.Board;
 import com.cdhi.domain.Card;
 import com.cdhi.domain.User;
+import com.cdhi.domain.enums.Column;
 import com.cdhi.repositories.BoardRepository;
 import com.cdhi.repositories.CardRepository;
 import com.cdhi.repositories.UserRepository;
@@ -48,8 +49,8 @@ public class DBService {
         Board board3 = new Board("Board 3", user2);
         Board board4 = new Board("Board do teste", user3, "too long for columnValue too long for columnValue too long for columnValue too long for columnValue too long for columnValue too long for columnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
-        Card card1 = new Card(0, "Card 1", "jaz aqui o card 1", Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
-        Card card2 = new Card(0, "Card 2", "este é o card 2", Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
+        Card card1 = new Card(Column.BACKLOG, 0, "Card 1", "jaz aqui o card 1", Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
+        Card card2 = new Card(Column.TODO, 0, "Card 2", "este é o card 2", Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
 
         board4.getCards().addAll(Arrays.asList(card1, card2));
         card1.setBoard(board4);
