@@ -1,23 +1,16 @@
 package com.cdhi.domain.enums;
 
-public enum Background {
+public enum Column {
 
-    B0(0, "BACKGROUND 0"),
-    B1(1, "BACKGROUND 1"),
-    B2(2, "BACKGROUND 2"),
-    B3(3, "BACKGROUND 3"),
-    B4(4, "BACKGROUND 4"),
-    B5(5, "BACKGROUND 5"),
-    B6(6, "BACKGROUND 6"),
-    B7(7, "BACKGROUND 7"),
-    B8(8, "BACKGROUND 8"),
-    B9(9, "BACKGROUND 9"),
-    B10(10, "BACKGROUND 10");
+    BACKLOG(0, "BACKLOG"),
+    TODO(1, "TODO"),
+    ONGOING(2, "ONGOING"),
+    DONE(3, "DONE");
 
     private int cod;
     private String description;
 
-    private Background(int cod, String description) {
+    private Column(int cod, String description) {
         this.cod = cod;
         this.description = description;
     }
@@ -30,12 +23,12 @@ public enum Background {
         return description;
     }
 
-    public static Background toEnum(Integer cod) {
+    public static Column toEnum(Integer cod) {
         if (cod == null) {
             return null;
         }
 
-        for (Background x : Background.values()) {
+        for (Column x : Column.values()) {
             if (cod.equals(x.getCod())) {
                 return x;
             }
