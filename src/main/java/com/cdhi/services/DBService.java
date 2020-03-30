@@ -57,7 +57,11 @@ public class DBService {
         card2.setBoard(board4);
 
         card1.getUsers().add(user1);
+        user1.getCards().add(card1);
+
         card2.getUsers().addAll(Arrays.asList(user2, user3));
+        user2.getCards().add(card2);
+        user3.getCards().add(card2);
 
         user1.getMyBoards().add(board1);
         user1.getBoards().add(board1);
