@@ -43,4 +43,11 @@ public class CardController {
                 .path("/{id}").buildAndExpand(c.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
+
+    @ApiOperation(value = "Delete Card")
+    @DeleteMapping(value = "{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+        service.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).body("Card Id: " + id + " deleted successfully!");
+    }
 }

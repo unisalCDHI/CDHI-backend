@@ -38,7 +38,6 @@ public class CardService {
         return card;
     }
 
-
     public Card create(NewCardDTO newCardDTO, Integer boardId) {
         newCardDTO.setId(null);
         Card card = toObject(newCardDTO);
@@ -49,7 +48,14 @@ public class CardService {
         return cardRepository.save(card);
     }
 
+
+
     private Card toObject(NewCardDTO newCardDTO) {
         return new Card(newCardDTO.getColumn(), newCardDTO.getSize(), newCardDTO.getName(), newCardDTO.getDescription(), newCardDTO.getStart_date(), newCardDTO.getEnd_date());
+    }
+
+    public void delete(Integer id) {
+        Card card = findOne(id);
+        cardRepository.deleteById(id);
     }
 }
