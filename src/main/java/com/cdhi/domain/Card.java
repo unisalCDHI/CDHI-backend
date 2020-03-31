@@ -14,7 +14,7 @@ public class Card {
     private String name;
     @Lob
     private String description;
-    private Column column;
+    private Column _column;
 //    private Set<Comment>
     private Date start_date;
     private Date end_date;
@@ -30,7 +30,7 @@ public class Card {
     }
 
     public Card(Column column, Integer size, String name, String description, Date start_date, Date end_date) {
-        this.column = column;
+        this._column = column;
         this.size = size;
         this.name = name;
         this.description = description;
@@ -103,11 +103,11 @@ public class Card {
     }
 
     public Column getColumn() {
-        return column;
+        return _column;
     }
 
     public void setColumn(Column column) {
-        this.column = column;
+        this._column = column;
     }
 
     @Override
