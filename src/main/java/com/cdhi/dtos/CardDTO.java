@@ -21,7 +21,6 @@ public class CardDTO {
     private Integer size;
     @Length(min = 0, message = "Nome deve ter pelo menos 1 caracter")
     private String name;
-    @Lob
     private String description;
     @NotNull(message = "Parâmetro 'column' não pode ser nulo")
     private Column column;

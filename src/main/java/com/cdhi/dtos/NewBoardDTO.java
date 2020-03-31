@@ -15,6 +15,5 @@ public class NewBoardDTO {
     @NotEmpty(message = "'Name' is required")
     private String name;
 
-    @Lob
     private String description;
 }
