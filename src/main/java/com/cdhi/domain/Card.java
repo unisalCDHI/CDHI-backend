@@ -11,10 +11,12 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer size;
+    @javax.persistence.Column(name="_name")
     private String name;
     @Lob
     private String description;
-    private Column _column;
+    @javax.persistence.Column(name="_column")
+    private Column column;
 //    private Set<Comment>
     private Date start_date;
     private Date end_date;
@@ -30,7 +32,7 @@ public class Card {
     }
 
     public Card(Column column, Integer size, String name, String description, Date start_date, Date end_date) {
-        this._column = column;
+        this.column = column;
         this.size = size;
         this.name = name;
         this.description = description;
@@ -103,11 +105,11 @@ public class Card {
     }
 
     public Column getColumn() {
-        return _column;
+        return column;
     }
 
     public void setColumn(Column column) {
-        this._column = column;
+        this.column = column;
     }
 
     @Override

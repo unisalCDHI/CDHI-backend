@@ -13,6 +13,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @javax.persistence.Column(name="_name")
     private String name;
     @Column(unique = true)
     private String email;

@@ -25,6 +25,7 @@ public class Board implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @javax.persistence.Column(name="_name")
     private String name;
     @Lob
     private String description;
