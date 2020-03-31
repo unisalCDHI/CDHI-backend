@@ -12,7 +12,6 @@ import com.cdhi.services.exceptions.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +34,6 @@ public class CardService {
     @Autowired
     UserRepository userRepository;
 
-    @Transactional
     public List<CardDTO> findAll(Integer boardId) {
         Board board = boardRepository.getOne(boardService.findOne(boardId).getId());
         Resolver.isUserInBoard(board);
@@ -43,7 +41,6 @@ public class CardService {
         return cards.stream().map(CardDTO::new).collect(Collectors.toList());
     }
 
-    @Transactional
     public Card findOne(Integer cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(() ->
                 new ObjectNotFoundException("There's no card with id: " + cardId));
@@ -51,7 +48,6 @@ public class CardService {
         return card;
     }
 
-    @Transactional
     public Card create(NewCardDTO newCardDTO) {
         newCardDTO.setId(null);
         Board board = boardRepository.getOne(boardService.findOne(newCardDTO.getBoardId()).getId());
@@ -67,7 +63,6 @@ public class CardService {
         return c;
     }
 
-    @Transactional
     private Card toObject(NewCardDTO newCardDTO, Board board) {
         Card card = new Card(newCardDTO.getColumn(), newCardDTO.getSize(), newCardDTO.getName(), newCardDTO.getDescription(), newCardDTO.getStart_date(), newCardDTO.getEnd_date());
         for (Integer id : newCardDTO.getUsersIds()) {
@@ -80,13 +75,11 @@ public class CardService {
         return card;
     }
 
-    @Transactional
     public void delete(Integer id) {
         Card card = findOne(id);
         cardRepository.deleteById(id);
     }
 
-    @Transactional
     public Card save(Integer id, NewCardDTO newCardDTO) {
         Card card = findOne(id);
         Set<User> usersOld = card.getUsers();
