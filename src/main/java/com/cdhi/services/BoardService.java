@@ -35,6 +35,7 @@ public class BoardService {
     @Autowired
     UserRepository userRepository;
 
+    @Transactional
     public void addUserInBoard(Integer boardId, Integer userId) {
         Resolver.isMe(userId);
         BoardDTO boardDTO = findOne(boardId);
@@ -49,6 +50,7 @@ public class BoardService {
         repo.save(board);
     }
 
+    @Transactional
     public void removeUserFromBoard(Integer boardId, Integer userId) {
         Resolver.isMe(userId);
         BoardDTO boardDTO = findOne(boardId);
@@ -65,6 +67,7 @@ public class BoardService {
         repo.save(board);
     }
 
+    @Transactional
     public void delete(Integer boardId) {
         List<User> usersToSave = new ArrayList<>();
 
@@ -97,6 +100,7 @@ public class BoardService {
             return toDTO(board);
     }
 
+    @Transactional
     private BoardDTO toDTO(Board board) {
         System.out.println(board);
         return new BoardDTO(
@@ -109,6 +113,7 @@ public class BoardService {
                 board.getCards());
     }
 
+    @Transactional
     public Board create(NewBoardDTO newBoardDTO) {
         UserSS userSS = UserService.authenticated();
         if (userSS==null) {
@@ -128,10 +133,12 @@ public class BoardService {
         return savedBoard;
     }
 
+    @Transactional
     private Board toBoard(NewBoardDTO newBoardDTO) {
         return new Board(newBoardDTO.getName(), null , newBoardDTO.getDescription());
     }
 
+    @Transactional
     public void leave(Integer boardId) {
         BoardDTO boardDTO = findOne(boardId);
         Board board = repo.getOne(boardDTO.getId());
@@ -149,6 +156,7 @@ public class BoardService {
 
     }
 
+    @Transactional
     public Board save(Integer boardId, NewBoardDTO newBoardDTO) {
         BoardDTO boardDTO = findOne(boardId);
         Board board = repo.getOne(boardId);
@@ -181,6 +189,7 @@ public class BoardService {
         return boardsPage;
     }
 
+    @Transactional
     public void changeBackground(Integer boardId, Background background) {
         BoardDTO boardDTO = findOne(boardId);
         Board board = repo.getOne(boardId);
