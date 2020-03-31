@@ -1,7 +1,9 @@
 package com.cdhi.controllers;
 
 import com.cdhi.domain.Card;
+import com.cdhi.dtos.CardDTO;
 import com.cdhi.dtos.NewCardDTO;
+import com.cdhi.dtos.UserDTO;
 import com.cdhi.services.CardService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,7 +27,7 @@ public class CardController {
 
     @ApiOperation(value = "Get Cards from board")
     @GetMapping
-    public ResponseEntity<List<Card>> findAll(@RequestParam(value = "board", defaultValue = "") Integer boardId) {
+    public ResponseEntity<List<CardDTO>> findAll(@RequestParam(value = "board", defaultValue = "") Integer boardId) {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll(boardId));
     }
 
@@ -37,8 +39,8 @@ public class CardController {
 
     @ApiOperation(value = "Create Card")
     @PostMapping
-    public ResponseEntity<?> create(@RequestParam(value = "board", defaultValue = "") Integer boardId, @RequestBody @Valid NewCardDTO newCardDTO) {
-        Card c = service.create(newCardDTO, boardId);
+    public ResponseEntity<?> create(@RequestBody @Valid NewCardDTO newCardDTO) {
+        Card c = service.create(newCardDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(c.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -49,5 +51,11 @@ public class CardController {
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         service.delete(id);
         return ResponseEntity.status(HttpStatus.OK).body("Card Id: " + id + " deleted successfully!");
+    }
+
+    @ApiOperation(value = "Update Card")
+    @PutMapping(value = "{id}")
+    public ResponseEntity<?> update(@PathVariable("id") Integer id, @RequestBody NewCardDTO newCardDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.save(id, newCardDTO));
     }
 }

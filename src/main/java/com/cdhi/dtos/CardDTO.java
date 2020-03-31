@@ -1,5 +1,6 @@
 package com.cdhi.dtos;
 
+import com.cdhi.domain.Board;
 import com.cdhi.domain.Card;
 import com.cdhi.domain.enums.Column;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
-public class NewCardDTO {
+public class CardDTO {
 
     private Integer id;
     private Integer size;
@@ -27,11 +28,10 @@ public class NewCardDTO {
     private Date start_date;
     private Date end_date;
 
-    private Set<Integer> usersIds;
+    private Set<UserDTO> users;
+    private Board board;
 
-    private Integer boardId;
-
-    public NewCardDTO(Card card) {
+    public CardDTO(Card card) {
         this.id = card.getId();
         this.size = card.getSize();
         this.name = card.getName();
@@ -39,7 +39,7 @@ public class NewCardDTO {
         this.column = card.getColumn();
         this.start_date = card.getStart_date();
         this.end_date = card.getEnd_date();
-        this.boardId = card.getBoard().getId();
-        this.usersIds = card.getUsers().stream().map(user -> getId()).collect(Collectors.toSet());
+        this.users = card.getUsers().stream().map(UserDTO::new).collect(Collectors.toSet());
+        this.board = card.getBoard();
     }
 }
