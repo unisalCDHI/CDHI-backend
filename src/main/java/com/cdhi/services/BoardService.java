@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,7 @@ public class BoardService {
         repo.deleteById(board.getId());
     }
 
+    @Transactional
     public BoardDTO findOne(Integer id) {
             Board board = repo.findById(id).orElseThrow(() ->
                     new ObjectNotFoundException("There's no board with id: " + id));
@@ -158,6 +160,7 @@ public class BoardService {
         return repo.save(board);
     }
 
+    @Transactional
     public Page<BoardDTO> findAllMyByPage(String name, Integer page, Integer size, String orderBy, String direction) {
         UserSS userSS = UserService.authenticated();
         User user = userService.findOne(userSS.getId());
@@ -165,6 +168,7 @@ public class BoardService {
         return repo.findDistinctByNameContainingIgnoreCaseAndOwner_id(name, pageRequest, user.getId()).map(BoardDTO::new);
     }
 
+    @Transactional
     public Page<BoardDTO> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
         UserSS userSS = UserService.authenticated();
         User user = userService.findOne(userSS.getId());
