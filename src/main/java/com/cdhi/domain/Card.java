@@ -1,5 +1,7 @@
 package com.cdhi.domain;
 
+import com.cdhi.domain.enums.Column;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -12,7 +14,7 @@ public class Card {
     private String name;
     @Lob
     private String description;
-//    private ENUM column
+    private Column column;
 //    private Set<Comment>
     private Date start_date;
     private Date end_date;
@@ -27,7 +29,8 @@ public class Card {
     public Card() {
     }
 
-    public Card(Integer size, String name, String description, Date start_date, Date end_date) {
+    public Card(Column column, Integer size, String name, String description, Date start_date, Date end_date) {
+        this.column = column;
         this.size = size;
         this.name = name;
         this.description = description;
@@ -97,6 +100,14 @@ public class Card {
 
     public void setUsers(Set<User> users) {
         this.users = users;
+    }
+
+    public Column getColumn() {
+        return column;
+    }
+
+    public void setColumn(Column column) {
+        this.column = column;
     }
 
     @Override
