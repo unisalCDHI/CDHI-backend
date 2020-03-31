@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,7 +64,7 @@ public class User implements Serializable {
                         .toString()
         );
         addProfile(Profile.USER);
-        this.created = new Date(System.currentTimeMillis());
+        this.created = Date.from(ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("America/Sao_Paulo")).toInstant());
     }
 
     public User(String name, String email, String password) {
@@ -82,7 +85,7 @@ public class User implements Serializable {
                         .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
                         .toString()
         );
-        this.created = new Date(System.currentTimeMillis());
+        this.created = Date.from(ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("America/Sao_Paulo")).toInstant());;
     }
 
     public Integer getId() {

@@ -9,7 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,11 +35,12 @@ public class ConfirmEmailTimeOut {
         int count = 0;
         List<Map<String, Integer>> keys = repo.findKeys();
 
-        List<User> usersDisabled = repo.findByIdIn(keys.stream().map(key -> key.get("USER_ID")).collect(Collectors.toList()));
+        List<User> usersDisabled = repo.findByIdIn(keys.stream().map(key -> key.get("USER_ENTITY_ID")).collect(Collectors.toList()));
         List<User> timedOutUsers = new ArrayList<>();
 
         for (User user : usersDisabled) {
-            if (!user.getEnabled() && (System.currentTimeMillis() - user.getCreated().getTime()) >= accountExpiration) { //'enabled = false' and past '24' hours
+            if (!user.getEnabled() &&
+                    (Date.from(ZonedDateTime.ofInstant(Instant.now(), ZoneId.of("America/Sao_Paulo")).toInstant()).getTime() - user.getCreated().getTime()) >= accountExpiration) { //'enabled = false' and past '24' hours
                 timedOutUsers.add(user);
                 count++;
             }
