@@ -17,6 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,7 @@ public class UserService {
     @Autowired
     private EmailService emailService;
 
+    @Transactional
     public static UserSS authenticated() {
         try {
             return (UserSS) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -45,6 +47,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public User findOne(Integer id) {
         UserSS user = UserService.authenticated();
         if (user==null || !user.hasRole(Profile.ADMIN) && !id.equals(user.getId())) {
@@ -57,7 +60,7 @@ public class UserService {
         return repo.findDistinctByNameContainingIgnoreCase(name).stream().map(UserDTO::new).collect(Collectors.toList());
     }
 
-
+    @Transactional
     public User create(NewUserDTO newUserDTO) {
         newUserDTO.setId(null);
         if (repo.findByEmail(newUserDTO.getEmail()) != null)
@@ -70,14 +73,17 @@ public class UserService {
         }
     }
 
+    @Transactional
     public User toObject(NewUserDTO newUserDTO) {
         return new User(newUserDTO.getName(), newUserDTO.getEmail(), newUserDTO.getPassword());
     }
 
+    @Transactional
     public UserDTO toDTO(User user) {
         return new UserDTO(user);
     }
 
+    @Transactional
     public User save(UserDTO userDTO, Integer userId) {
         User userToUpdate = findOne(userId);
         userToUpdate
@@ -86,6 +92,7 @@ public class UserService {
         return findOne(userId);
     }
 
+    @Transactional
     public User save(String newPassword, Integer userId) {
         User userToUpdate = findOne(userId);
         userToUpdate.setPassword(CRYPTER.encode(newPassword));
@@ -93,15 +100,18 @@ public class UserService {
         return findOne(userId);
     }
 
+    @Transactional
     public void delete(Integer userId) {
         repo.deleteById(userId);
     }
 
+    @Transactional
     public Page<UserDTO> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
         return repo.findDistinctByNameContainingIgnoreCase(name, pageRequest).map(UserDTO::new);
     }
 
+    @Transactional
     public User enable(Integer id, String _key) {
         List<String> key = new ArrayList<>();
         key.add(_key);

@@ -6,6 +6,7 @@ import com.cdhi.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
@@ -23,6 +24,7 @@ public class AuthService {
 
     private Random rand = new Random();
 
+    @Transactional
     public void sendNewPassword(String email) {
         User user = userRepository.findByEmail(email);
         if (user == null)
