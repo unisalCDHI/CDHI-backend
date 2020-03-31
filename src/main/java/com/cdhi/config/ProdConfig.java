@@ -18,15 +18,15 @@ import java.text.ParseException;
 @Configuration
 @Profile("prod")
 @EnableScheduling
-@PropertySource({"classpath:application.properties"})
+//@PropertySource({"classpath:application.properties"})
 public class ProdConfig {
 
-    @Bean
-    @Primary
-    @ConfigurationProperties(prefix = "spring.datasource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create().build();
-    }
+//    @Bean
+//    @Primary
+//    @ConfigurationProperties(prefix = "spring.datasource")
+//    public DataSource dataSource() {
+//        return DataSourceBuilder.create().build();
+//    }
 
     private static final int interval = 300000;
 
