@@ -17,7 +17,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,6 @@ public class BoardService {
     @Autowired
     UserRepository userRepository;
 
-    @Transactional
     public void addUserInBoard(Integer boardId, Integer userId) {
         Resolver.isMe(userId);
         BoardDTO boardDTO = findOne(boardId);
@@ -50,7 +48,6 @@ public class BoardService {
         repo.save(board);
     }
 
-    @Transactional
     public void removeUserFromBoard(Integer boardId, Integer userId) {
         Resolver.isMe(userId);
         BoardDTO boardDTO = findOne(boardId);
@@ -67,7 +64,6 @@ public class BoardService {
         repo.save(board);
     }
 
-    @Transactional
     public void delete(Integer boardId) {
         List<User> usersToSave = new ArrayList<>();
 
@@ -92,7 +88,6 @@ public class BoardService {
         repo.deleteById(board.getId());
     }
 
-    @Transactional
     public BoardDTO findOne(Integer id) {
             Board board = repo.findById(id).orElseThrow(() ->
                     new ObjectNotFoundException("There's no board with id: " + id));
@@ -100,7 +95,6 @@ public class BoardService {
             return toDTO(board);
     }
 
-    @Transactional
     private BoardDTO toDTO(Board board) {
         System.out.println(board);
         return new BoardDTO(
@@ -113,7 +107,6 @@ public class BoardService {
                 board.getCards());
     }
 
-    @Transactional
     public Board create(NewBoardDTO newBoardDTO) {
         UserSS userSS = UserService.authenticated();
         if (userSS==null) {
@@ -133,12 +126,10 @@ public class BoardService {
         return savedBoard;
     }
 
-    @Transactional
     private Board toBoard(NewBoardDTO newBoardDTO) {
         return new Board(newBoardDTO.getName(), null , newBoardDTO.getDescription());
     }
 
-    @Transactional
     public void leave(Integer boardId) {
         BoardDTO boardDTO = findOne(boardId);
         Board board = repo.getOne(boardDTO.getId());
@@ -156,7 +147,6 @@ public class BoardService {
 
     }
 
-    @Transactional
     public Board save(Integer boardId, NewBoardDTO newBoardDTO) {
         BoardDTO boardDTO = findOne(boardId);
         Board board = repo.getOne(boardId);
@@ -168,7 +158,6 @@ public class BoardService {
         return repo.save(board);
     }
 
-    @Transactional
     public Page<BoardDTO> findAllMyByPage(String name, Integer page, Integer size, String orderBy, String direction) {
         UserSS userSS = UserService.authenticated();
         User user = userService.findOne(userSS.getId());
@@ -176,7 +165,6 @@ public class BoardService {
         return repo.findDistinctByNameContainingIgnoreCaseAndOwner_id(name, pageRequest, user.getId()).map(BoardDTO::new);
     }
 
-    @Transactional
     public Page<BoardDTO> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
         UserSS userSS = UserService.authenticated();
         User user = userService.findOne(userSS.getId());
@@ -189,7 +177,6 @@ public class BoardService {
         return boardsPage;
     }
 
-    @Transactional
     public void changeBackground(Integer boardId, Background background) {
         BoardDTO boardDTO = findOne(boardId);
         Board board = repo.getOne(boardId);

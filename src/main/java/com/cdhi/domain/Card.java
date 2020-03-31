@@ -14,7 +14,7 @@ public class Card {
     private Integer size;
     @javax.persistence.Column(name="_name")
     private String name;
-    @Lob
+    @javax.persistence.Column(columnDefinition="TEXT")
     private String description;
     @javax.persistence.Column(name="_column")
     private Column column;
