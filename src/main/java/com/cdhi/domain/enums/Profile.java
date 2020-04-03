@@ -31,7 +31,7 @@ public enum Profile {
                 return x;
             }
         }
-        throw new IllegalArgumentException("Invalid Id: " + cod);
+        throw new IllegalArgumentException("Id Inválido: " + cod);
 
 
     }

@@ -46,28 +46,28 @@ public class BoardController {
     @DeleteMapping(value = "{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         service.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Board Id: " + id + " deleted successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body("Quadro Id: " + id + " excluído com sucesso!");
     }
 
     @ApiOperation(value = "Add user to Board")
     @PostMapping(value = "{boardId}/{userId}")
     public ResponseEntity<?> addUserIntoBoard(@PathVariable("boardId") Integer boardId, @PathVariable("userId") Integer userId) {
         service.addUserInBoard(boardId, userId);
-        return ResponseEntity.status(HttpStatus.OK).body("User Id: " + userId + " added to Board " + boardId + " successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário Id: " + userId + " adicionado ao Quadro " + boardId + " com sucesso!");
     }
 
     @ApiOperation(value = "Remove user from Board")
     @DeleteMapping(value = "{boardId}/{userId}")
     public ResponseEntity<?> removeUserFromBoard(@PathVariable("boardId") Integer boardId, @PathVariable("userId") Integer userId) {
         service.removeUserFromBoard(boardId, userId);
-        return ResponseEntity.status(HttpStatus.OK).body("User Id: " + userId + " removed from Board " + boardId + " successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário Id: " + userId + " excluído do Quadro " + boardId + " com sucesso!");
     }
 
     @ApiOperation(value = "Leave Board")
     @PutMapping(value = "{boardId}/leave")
     public ResponseEntity<?> leaveBoard(@PathVariable("boardId") Integer boardId) {
         service.leave(boardId);
-        return ResponseEntity.status(HttpStatus.OK).body("You left Board " + boardId + " successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body("Você saiu do Quadro " + boardId + " com sucesso!");
     }
 
     @ApiOperation(value = "Edit Board")
@@ -100,7 +100,7 @@ public class BoardController {
     @PutMapping(value = "/{boardId}/background")
     public ResponseEntity<?> changeBackground(@PathVariable("boardId") Integer boardId, @RequestBody Background background) {
         service.changeBackground(boardId, background);
-        return ResponseEntity.status(HttpStatus.OK).body("You changed background from Board " + boardId + " successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body("Você mudou o papel de parede do Quadro " + boardId + " com sucesso!");
     }
 
 }

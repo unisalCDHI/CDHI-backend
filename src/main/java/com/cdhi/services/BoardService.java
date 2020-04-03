@@ -90,7 +90,7 @@ public class BoardService {
 
     public BoardDTO findOne(Integer id) {
             Board board = repo.findById(id).orElseThrow(() ->
-                    new ObjectNotFoundException("There's no board with id: " + id));
+                    new ObjectNotFoundException("Não foi encontrado Quadro com id: " + id));
             Resolver.isUserInBoard(board); // verifies if user is in board he's trying to get
             return toDTO(board);
     }

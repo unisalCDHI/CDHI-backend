@@ -33,6 +33,6 @@ public enum Column {
                 return x;
             }
         }
-        throw new IllegalArgumentException("Invalid Id: " + cod);
+        throw new IllegalArgumentException("Id Inválido: " + cod);
     }
 }

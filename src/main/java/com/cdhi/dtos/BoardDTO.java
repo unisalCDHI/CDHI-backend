@@ -17,17 +17,17 @@ public class BoardDTO implements Serializable {
 
     private Integer id;
 
-    @NotNull(message = "'Name' cannot be null")
-    @NotEmpty(message = "'Name' is required")
+    @NotNull(message = "'Nome' não pode ser nulo")
+    @NotEmpty(message = "'Nome' é obrigatório")
     private String name;
 
     private String description;
 
-    @NotNull(message = "'Owner' cannot be null")
-    @NotEmpty(message = "'Owner' is required")
+    @NotNull(message = "'Owner' não pode ser nulo")
+    @NotEmpty(message = "'Owner' é obrigatório")
     private UserDTO owner;
 
-    @NotNull(message = "'Users' cannot be null")
+    @NotNull(message = "'Users' não pode ser nulo")
     private List<UserDTO> users;
 
     private List<Card> cards;
