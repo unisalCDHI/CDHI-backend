@@ -33,7 +33,7 @@ public class AuthController {
             response.addHeader("Authorization", "Bearer " + token);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            throw new ObjectNotFoundException("Invalid Token");
+            throw new ObjectNotFoundException("Token Inválido");
         }
     }
 

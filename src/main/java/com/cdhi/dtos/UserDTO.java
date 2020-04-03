@@ -11,13 +11,13 @@ public class UserDTO implements Serializable {
 
     private Integer id;
 
-    @NotNull(message = "'Email' cannot be null")
-    @NotEmpty(message = "'Name' is required")
+    @NotNull(message = "'Nome' não pode ser nulo")
+    @NotEmpty(message = "'Nome' é obrigatório")
     private String name;
 
-    @NotNull(message = "'Email' cannot be null")
-    @NotEmpty(message = "'Email' is required")
-    @Email(message = "Invalid Email")
+    @NotNull(message = "'Email' não pode ser nulo")
+    @NotEmpty(message = "'Email' é obrigatório")
+    @Email(message = "Email inválido <email@exemplo.com>")
     private String email;
 
     public UserDTO() {

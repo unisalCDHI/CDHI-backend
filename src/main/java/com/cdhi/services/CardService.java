@@ -43,7 +43,7 @@ public class CardService {
 
     public Card findOne(Integer cardId) {
         Card card = cardRepository.findById(cardId).orElseThrow(() ->
-                new ObjectNotFoundException("There's no card with id: " + cardId));
+                new ObjectNotFoundException("Não foi encontrado um Cartão com id: " + cardId));
         Resolver.isUserInBoard(card.getBoard());
         return card;
     }

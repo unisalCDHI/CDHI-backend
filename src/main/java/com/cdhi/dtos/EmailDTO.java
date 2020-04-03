@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 public class EmailDTO implements Serializable {
 
-    @NotEmpty(message = "The field must be filled")
-    @Email(message = "Invalid Email")
+    @NotEmpty(message = "O campo deve ser preenchido")
+    @Email(message = "Email inválido <email@exemplo.com>")
     private String email;
 
     public EmailDTO() {

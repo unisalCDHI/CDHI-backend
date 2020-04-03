@@ -3,7 +3,6 @@ package com.cdhi.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import javax.persistence.Lob;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -11,8 +10,8 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class NewBoardDTO {
 
-    @NotNull(message = "'Name' cannot be null")
-    @NotEmpty(message = "'Name' is required")
+    @NotNull(message = "'Nome' não pode ser nulo")
+    @NotEmpty(message = "'Nome' é obrigatório")
     private String name;
 
     private String description;

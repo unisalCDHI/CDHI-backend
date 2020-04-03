@@ -50,7 +50,7 @@ public class CardController {
     @DeleteMapping(value = "{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         service.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Card Id: " + id + " deleted successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body("Cartão Id: " + id + " excluído com sucesso!");
     }
 
     @ApiOperation(value = "Update Card")

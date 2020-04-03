@@ -60,7 +60,7 @@ public class UserController {
     @DeleteMapping(value = "{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
         service.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).body("User Id: " + id + " deleted successfully!");
+        return ResponseEntity.status(HttpStatus.OK).body("Usuário Id: " + id + " excluído com sucesso!");
     }
 
     @ApiOperation(value = "Get all Users By PAGE + search name")
@@ -78,8 +78,8 @@ public class UserController {
     @PutMapping(value = "/password/{id}")
     public ResponseEntity<?> changePassword(@PathVariable("id") Integer id,
                                             @RequestBody
-                                                @NotNull(message = "'Password' cannot be null")
-                                                @NotEmpty(message = "'Password' is required") String newPassword) {
+                                                @NotNull(message = "'Password' não pode ser nulo")
+                                                @NotEmpty(message = "'Password' é obrigatório") String newPassword) {
         return ResponseEntity.status(HttpStatus.OK).body(service.save(newPassword, id));
     }
 
