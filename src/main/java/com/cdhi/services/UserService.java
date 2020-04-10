@@ -57,7 +57,7 @@ public class UserService {
 
     @Transactional
     public List<UserDTO> findAll(String name) {
-        return repo.findDistinctByNameContainingIgnoreCase(name).stream().map(UserDTO::new).collect(Collectors.toList());
+        return repo.findDistinctByNameContainingIgnoreCase(name).stream().filter(User::getEnabled).map(UserDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
@@ -106,7 +106,8 @@ public class UserService {
     @Transactional
     public Page<UserDTO> findAllByPage(String name, Integer page, Integer size, String orderBy, String direction) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.Direction.valueOf(direction), orderBy);
-        return repo.findDistinctByNameContainingIgnoreCase(name, pageRequest).map(UserDTO::new);
+        // TODO
+        return repo.findAllPageable(name.toLowerCase(), pageRequest).map(UserDTO::new);
     }
 
     @Transactional

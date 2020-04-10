@@ -69,7 +69,7 @@ public class UserController {
             @RequestParam(value = "name", defaultValue = "") String name,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "10")Integer size,
-            @RequestParam(value = "orderBy", defaultValue = "name")String orderBy,
+            @RequestParam(value = "orderBy", defaultValue = "_name")String orderBy,
             @RequestParam(value = "direction", defaultValue = "ASC")String direction) {
         return ResponseEntity.status(HttpStatus.OK).body(service.findAllByPage(name, page, size, orderBy, direction));
     }
