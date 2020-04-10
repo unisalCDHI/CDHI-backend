@@ -63,6 +63,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body("Usuário Id: " + id + " excluído com sucesso!");
     }
 
+    @Deprecated
     @ApiOperation(value = "Get all Users By PAGE + search name")
     @GetMapping(value = "page")
     public ResponseEntity<Page<UserDTO> > getAllByPage(
