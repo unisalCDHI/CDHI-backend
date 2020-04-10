@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,6 +30,7 @@ public class ConfirmEmailTimeOut {
 
     private final static int accountExpiration = 86400000;
 
+    @Transactional
     public void checkout(int interval) {
 
         log.info("Rodando o Job cada " + interval + " ms... -> Procurando usuários com o tempo de confirmação de conta expirado");

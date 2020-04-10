@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ public class DBService {
     @Autowired
     BCryptPasswordEncoder CRYPTER;
 
+    @Transactional
     public void instantiateTestDatabase() throws ParseException {
 
         User user1 = new User("Jorge", "jorgesilva@gmail.com", CRYPTER.encode("123456"));
