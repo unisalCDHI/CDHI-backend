@@ -25,7 +25,7 @@ public class NewUserDTO implements Serializable {
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotNull(message = "'Password' não pode ser nulo")
-    @NotEmpty(message = "'Password' é obrigatório")
+    @NotNull(message = "'Senha' não pode ser nulo")
+    @NotEmpty(message = "'Senha' é obrigatório")
     private String password;
 }
