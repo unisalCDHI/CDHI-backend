@@ -6,18 +6,27 @@ import com.cdhi.services.SmtpEmailService;
 import com.cdhi.services.jobs.ConfirmEmailTimeOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import javax.sql.DataSource;
 import java.text.ParseException;
 
 @Configuration
 @Profile("dev")
 @EnableScheduling
+//@PropertySource({"classpath:application.properties"})
 public class DevConfig {
+
+//    @Bean
+//    @Primary
+//    @ConfigurationProperties(prefix = "spring.datasource")
+//    public DataSource dataSource() {
+//        return DataSourceBuilder.create().build();
+//    }
 
     private static final int interval = 300000;
 
@@ -39,7 +48,7 @@ public class DevConfig {
     }
 
     @Bean
-    public EmailService emailService(){
+    public EmailService emailService() {
         return new SmtpEmailService();
     }
 
