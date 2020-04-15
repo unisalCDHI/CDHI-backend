@@ -33,7 +33,7 @@ public class AuthService {
         user.setPassword(CRYPER.encode(newPass));
 
         userRepository.save(user);
-        emailService.sendNewPasswordEmail(user, newPass);
+        emailService.sendPasswordHtmlEmail(user, newPass);
     }
 
     private String newPassword() {
