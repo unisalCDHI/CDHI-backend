@@ -47,7 +47,7 @@ public abstract class AbstractEmailService implements EmailService {
         Context context = new Context();
         context.setVariable("user", obj);
         context.setVariable("confirm_url", confirm_url);
-        return templateEngine.process("email/userConfirmation", context);
+        return templateEngine.process("userConfirmation", context);
     }
 
     @Override
@@ -111,6 +111,6 @@ public abstract class AbstractEmailService implements EmailService {
         Context context = new Context();
         context.setVariable("user", obj);
         context.setVariable("password", newPass);
-        return templateEngine.process("email/password", context);
+        return templateEngine.process("password", context);
     }
 }
