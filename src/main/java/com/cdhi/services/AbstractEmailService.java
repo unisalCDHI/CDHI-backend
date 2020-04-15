@@ -81,8 +81,36 @@ public abstract class AbstractEmailService implements EmailService {
         SimpleMailMessage sm = new SimpleMailMessage();
         sm.setTo(user.getEmail());
         sm.setFrom(sender);
-        sm.setSubject("Solicitação de Nova Senha");
+        sm.setSubject("CDHI - Solicitação de Nova Senha");
         sm.setText("Nova Senha: " + newPass);
         return sm;
+    }
+
+    @Override
+    public void sendPasswordHtmlEmail(User obj, String newPass) {
+        try {
+            MimeMessage mm = prepareMimeMessageFromPassword(obj, newPass);
+            sendHtmlEmail(mm);
+        } catch (MessagingException e) {
+            sendNewPasswordEmail(obj, newPass);
+        }
+    }
+
+    protected MimeMessage prepareMimeMessageFromPassword(User obj, String newPass) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage, true);
+        mmh.setTo(obj.getEmail());
+        mmh.setFrom(sender);
+        mmh.setSubject("CDHI - Solicitação de Nova Senha");
+        mmh.setSentDate(new Date(System.currentTimeMillis()));
+        mmh.setText(htmlFromTemplatePassword(obj, newPass), true);
+        return mimeMessage;
+    }
+
+    protected String htmlFromTemplatePassword(User obj, String newPass) {
+        Context context = new Context();
+        context.setVariable("user", obj);
+        context.setVariable("password", newPass);
+        return templateEngine.process("email/password", context);
     }
 }
