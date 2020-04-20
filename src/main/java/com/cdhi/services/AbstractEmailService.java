@@ -70,6 +70,8 @@ public abstract class AbstractEmailService implements EmailService {
         mmh.setSentDate(new Date(System.currentTimeMillis()));
         mmh.setText(htmlFromTemplateUser(obj), true);
         mmh.addInline("logo", new ClassPathResource("static/img/logo.png"), "image/png");
+        Context context = new Context();
+        context.setVariable("logo", "logo");
         return mimeMessage;
     }
 
@@ -107,6 +109,8 @@ public abstract class AbstractEmailService implements EmailService {
         mmh.setSentDate(new Date(System.currentTimeMillis()));
         mmh.setText(htmlFromTemplatePassword(obj, newPass), true);
         mmh.addInline("logo", new ClassPathResource("static/img/logo.png"), "image/png");
+        Context context = new Context();
+        context.setVariable("logo", "logo");
         return mimeMessage;
     }
 
