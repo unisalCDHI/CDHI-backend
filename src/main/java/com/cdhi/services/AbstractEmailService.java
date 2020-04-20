@@ -63,7 +63,7 @@ public abstract class AbstractEmailService implements EmailService {
 
     protected MimeMessage prepareMimeMessageFromUser(User obj) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage, true);
+        MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage, true,"UTF-8");
         mmh.setTo(obj.getEmail());
         mmh.setFrom(sender);
         mmh.setSubject("CDHI - Usuário Cadastrado");
@@ -100,7 +100,7 @@ public abstract class AbstractEmailService implements EmailService {
 
     protected MimeMessage prepareMimeMessageFromPassword(User obj, String newPass) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage, true);
+        MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage, true,"UTF-8");
         mmh.setTo(obj.getEmail());
         mmh.setFrom(sender);
         mmh.setSubject("CDHI - Solicitação de Nova Senha");
