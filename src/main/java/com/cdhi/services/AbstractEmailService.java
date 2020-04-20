@@ -4,6 +4,7 @@ import com.cdhi.domain.User;
 import com.cdhi.dtos.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -68,6 +69,7 @@ public abstract class AbstractEmailService implements EmailService {
         mmh.setSubject("CDHI - Usuário Cadastrado");
         mmh.setSentDate(new Date(System.currentTimeMillis()));
         mmh.setText(htmlFromTemplateUser(obj), true);
+        mmh.addInline("logo", new ClassPathResource("static/img/logo.png"), "image/png");
         return mimeMessage;
     }
 
@@ -104,6 +106,7 @@ public abstract class AbstractEmailService implements EmailService {
         mmh.setSubject("CDHI - Solicitação de Nova Senha");
         mmh.setSentDate(new Date(System.currentTimeMillis()));
         mmh.setText(htmlFromTemplatePassword(obj, newPass), true);
+        mmh.addInline("logo", new ClassPathResource("static/img/logo.png"), "image/png");
         return mimeMessage;
     }
 
