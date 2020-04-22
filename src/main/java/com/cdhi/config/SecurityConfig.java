@@ -90,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
         CorsConfiguration config = new CorsConfiguration();
         source.registerCorsConfiguration("/**", config.applyPermitDefaultValues());
-        config.setExposedHeaders(Collections.singletonList("Authorization"));
+        config.setExposedHeaders(Arrays.asList("Authorization", "Id"));
         return source;
     }
 
