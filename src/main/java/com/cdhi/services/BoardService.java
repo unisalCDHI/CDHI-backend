@@ -74,9 +74,11 @@ public class BoardService {
         BoardDTO boardDTO = findOne(boardId);
         Board board = repo.getOne(boardId);
         Resolver.isMyBoard(board);
+        Board finalBoard = board;
 
         for(User user : board.getUsers()) {
             user.getBoards().removeIf(b -> b.getId().equals(boardId));
+            user.getCards().removeIf(card -> finalBoard.getCards().contains(card));
             usersToSave.add(user);
         }
         User u = userService.findOne(board.getOwner().getId());
