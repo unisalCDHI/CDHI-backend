@@ -48,7 +48,7 @@ public class DBService {
         Board board1 = new Board("Board 1", user1);
         Board board2 = new Board("Board 2", user1);
         Board board3 = new Board("Board 3", user2);
-        Board board4 = new Board("Board do teste", user3, "too long for columnValue too long for columnValue too long for columnValue too long for columnValue too long for columnValue too long for columnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaacolumnaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        Board board4 = new Board("Board 4", user3, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.");
 
         Card card1 = new Card(Column.BACKLOG, 0, "Card 1", "jaz aqui o card 1", Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
         Card card2 = new Card(Column.TODO, 0, "Card 2", "este é o card 2", Calendar.getInstance().getTime(), Calendar.getInstance().getTime());
@@ -70,12 +70,12 @@ public class DBService {
         board1.setOwner(user1);
 
         user1.getMyBoards().add(board2);
-        user1.getBoards().add(board2);
+        user1.getBoards().addAll(Arrays.asList(board2, board4));
         board2.getUsers().add(user1);
         board2.setOwner(user1);
 
         user2.getMyBoards().add(board3);
-        user2.getBoards().add(board3);
+        user2.getBoards().addAll(Arrays.asList(board3, board4));
         board3.getUsers().add(user2);
         board3.setOwner(user2);
 
@@ -87,7 +87,7 @@ public class DBService {
         board1.getUsers().add(user3);
         board2.getUsers().add(user3);
         board3.getUsers().add(user3);
-        board4.getUsers().add(user3);
+        board4.getUsers().addAll(Arrays.asList(user1, user2, user3));
         board4.setOwner(user3);
 
         userRepository.saveAll(Arrays.asList(user1, user2, user3));
