@@ -19,7 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,7 +48,7 @@ public class UserService {
     @Transactional
     public User findOne(Integer id) {
         UserSS user = UserService.authenticated();
-        if (user==null || !user.hasRole(Profile.ADMIN) && !id.equals(user.getId())) {
+        if (user == null || !user.hasRole(Profile.ADMIN) && !id.equals(user.getId())) {
             throw new AuthorizationException("Você precisa estar logado no usuário que deseja recuperar as informações ou em uma conta ADMIN");
         }
         return repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("Não foi encontrado um usuário com o id: " + id));
@@ -112,11 +111,13 @@ public class UserService {
 
     @Transactional
     public User enable(Integer id, String _key) {
-        List<String> key = new ArrayList<>();
-        key.add(_key);
-
         User user = repo.findById(id).orElseThrow(() -> new ObjectNotFoundException("Não foi encontrado um usuário com o id: " + id));
-        if (user.get_key().get(0).equals(key.get(0))) {
+        String userKey = "DO_NOT_FOUND_ANY_KEY";
+
+        for (String key : user.get_key()){
+            userKey = key;
+        }
+        if (userKey.equals(_key)) {
             user.setEnabled(true);
             user.deleteKey();
             repo.save(user);
