@@ -1,5 +1,6 @@
 package com.cdhi.domain;
 
+import com.cdhi.domain.enums.Avatar;
 import com.cdhi.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,6 +19,7 @@ public class User implements Serializable {
     @Column(unique = true)
     private String email;
     private Boolean enabled;
+    private Avatar avatar;
 
     private Date created;
 
@@ -167,6 +169,14 @@ public class User implements Serializable {
 
     public void setCards(Set<Card> cards) {
         this.cards = cards;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
     }
 
     @Override
