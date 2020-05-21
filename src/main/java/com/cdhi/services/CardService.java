@@ -83,7 +83,18 @@ public class CardService {
 
     @Transactional
     public void delete(Integer id) {
+        List<User> usersToSave = new ArrayList<>();
         Card card = findOne(id);
+
+        for(User user : card.getUsers()) {
+            user.getCards().remove(card);
+            usersToSave.add(user);
+        }
+        card.getUsers().clear();
+
+        cardRepository.save(card);
+        userRepository.saveAll(usersToSave);
+
         cardRepository.deleteById(id);
     }
 
