@@ -1,6 +1,7 @@
 package com.cdhi.dtos;
 
 import com.cdhi.domain.User;
+import com.cdhi.domain.enums.Avatar;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -19,6 +20,8 @@ public class UserDTO implements Serializable {
     @NotEmpty(message = "'Email' é obrigatório")
     @Email(message = "Email inválido <email@exemplo.com>")
     private String email;
+
+    private Avatar avatar;
 
     public UserDTO() {
     }
@@ -53,4 +56,11 @@ public class UserDTO implements Serializable {
         this.email = email;
     }
 
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
 }

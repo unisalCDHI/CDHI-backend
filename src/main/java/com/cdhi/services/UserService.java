@@ -1,6 +1,7 @@
 package com.cdhi.services;
 
 import com.cdhi.domain.User;
+import com.cdhi.domain.enums.Avatar;
 import com.cdhi.domain.enums.Profile;
 import com.cdhi.dtos.NewUserDTO;
 import com.cdhi.dtos.UserDTO;
@@ -66,7 +67,9 @@ public class UserService {
             throw new ObjectAlreadyExistsException("Este email já está sendo usado");
         else {
             newUserDTO.setPassword(CRYPTER.encode(newUserDTO.getPassword()));
-            User user = repo.save(toObject(newUserDTO));
+            User userToCreate = toObject(newUserDTO);
+            userToCreate.setAvatar(Avatar.A0);
+            User user = repo.save(userToCreate);
             emailService.sendUserConfirmationHtmlEmail(user);
             return user;
         }
@@ -85,6 +88,7 @@ public class UserService {
         User userToUpdate = findOne(userId);
         userToUpdate
                 .setName(userDTO.getName());
+        userToUpdate.setAvatar(userDTO.getAvatar());
         repo.save(userToUpdate);
         return findOne(userId);
     }
