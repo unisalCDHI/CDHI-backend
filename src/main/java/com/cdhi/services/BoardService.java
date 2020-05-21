@@ -108,6 +108,7 @@ public class BoardService {
                 board.getId(),
                 board.getName(),
                 board.getDescription(),
+                board.getBackground(),
                 userService.toDTO(board.getOwner()),
                 board.getUsers()
                         .stream().map(user -> userService.toDTO(user)).collect(Collectors.toList()),

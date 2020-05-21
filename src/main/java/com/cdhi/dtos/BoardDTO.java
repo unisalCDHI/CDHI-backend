@@ -2,6 +2,7 @@ package com.cdhi.dtos;
 
 import com.cdhi.domain.Board;
 import com.cdhi.domain.Card;
+import com.cdhi.domain.enums.Background;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -23,6 +24,8 @@ public class BoardDTO implements Serializable {
 
     private String description;
 
+    private Background background;
+
     @NotNull(message = "'Owner' não pode ser nulo")
     @NotEmpty(message = "'Owner' é obrigatório")
     private UserDTO owner;
@@ -39,5 +42,6 @@ public class BoardDTO implements Serializable {
         this.users = board.getUsers().stream().map(UserDTO::new).collect(Collectors.toList());
         this.owner = new UserDTO(board.getOwner());
         this.cards = board.getCards();
+        this.background = board.getBackground();
     }
 }
