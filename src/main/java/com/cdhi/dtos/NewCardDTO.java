@@ -4,6 +4,7 @@ import com.cdhi.domain.Card;
 import com.cdhi.domain.enums.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Lob;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class NewCardDTO {
 
     private Integer id;
