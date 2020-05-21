@@ -3,6 +3,7 @@ package com.cdhi.controllers;
 import com.cdhi.domain.Board;
 import com.cdhi.domain.enums.Background;
 import com.cdhi.dtos.BoardDTO;
+import com.cdhi.dtos.NewBackgroundDTO;
 import com.cdhi.dtos.NewBoardDTO;
 import com.cdhi.services.BoardService;
 import io.swagger.annotations.Api;
@@ -98,8 +99,8 @@ public class BoardController {
 
     @ApiOperation(value = "Changes board's background")
     @PutMapping(value = "/{boardId}/background")
-    public ResponseEntity<?> changeBackground(@PathVariable("boardId") Integer boardId, @RequestBody Background background) {
-        service.changeBackground(boardId, background);
+    public ResponseEntity<?> changeBackground(@PathVariable("boardId") Integer boardId, @RequestBody NewBackgroundDTO newBackgroundDTO) {
+        service.changeBackground(boardId, newBackgroundDTO.getBackground());
         return ResponseEntity.status(HttpStatus.OK).body("Você mudou o papel de parede do Quadro " + boardId + " com sucesso!");
     }
 
