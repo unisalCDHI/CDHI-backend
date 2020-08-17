@@ -106,6 +106,12 @@
             <artifactId>postgresql</artifactId>
             <version>9.4-1201-jdbc4</version>
         </dependency>
+        <!--		RABBITMQ-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+            <version>2.3.2.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
